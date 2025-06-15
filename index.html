@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos Poços de Caldas</title>
+    <meta name="description" content="Descubra os melhores eventos em Poços de Caldas - MG">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+<!-- Header -->
+<header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div class="mb-4 md:mb-0">
+                <h1 class="text-3xl font-bold text-gray-900">
+                    Eventos em Poços de Caldas
+                </h1>
+                <p class="text-gray-600 mt-1">Descubra o que está acontecendo na cidade das águas termais</p>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div id="loading-indicator" class="hidden flex items-center text-gray-500">
+                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="text-sm">Carregando...</span>
+                </div>
+
+                <div id="events-counter" class="text-sm text-gray-500">
+                    0 eventos encontrados
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 py-6">
+    <!-- Filtros -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex flex-col lg:flex-row gap-4">
+            <!-- Busca -->
+            <div class="flex-1">
+                <div class="relative">
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input
+                            type="text"
+                            id="search-input"
+                            placeholder="Buscar eventos, locais ou organizadores..."
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    />
+                </div>
+            </div>
+
+            <!-- Categoria -->
+            <div class="lg:w-48">
+                <select
+                        id="category-select"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                >
+                    <option value="">Todas as categorias</option>
+                </select>
+            </div>
+
+            <!-- Filtro Gratuito -->
+            <label class="flex items-center gap-3 px-4 py-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors lg:w-auto whitespace-nowrap">
+                <input
+                        type="checkbox"
+                        id="free-checkbox"
+                        class="rounded text-blue-600 focus:ring-blue-500"
+                />
+                <span class="text-sm font-medium">Apenas gratuitos</span>
+            </label>
+
+            <!-- Limpar filtros -->
+            <button
+                    id="clear-filters"
+                    class="hidden px-4 py-3 text-gray-600 hover:text-gray-800 text-sm font-medium lg:w-auto whitespace-nowrap"
+            >
+                Limpar filtros
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+            <div class="h-48 bg-gray-200"></div>
+            <div class="p-4">
+                <div class="h-4 bg-gray-200 rounded mb-2"></div>
+                <div class="h-6 bg-gray-200 rounded mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+            <div class="h-48 bg-gray-200"></div>
+            <div class="p-4">
+                <div class="h-4 bg-gray-200 rounded mb-2"></div>
+                <div class="h-6 bg-gray-200 rounded mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+            <div class="h-48 bg-gray-200"></div>
+            <div class="p-4">
+                <div class="h-4 bg-gray-200 rounded mb-2"></div>
+                <div class="h-6 bg-gray-200 rounded mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Eventos -->
+    <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Eventos serão inseridos aqui via JavaScript -->
+    </div>
+
+    <!-- Estado Vazio -->
+    <div id="empty-state" class="hidden text-center py-16">
+        <div class="text-gray-400 mb-4">
+            <svg class="w-20 h-20 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4m4 0V7a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1h1v13a2 2 0 002 2h8a2 2 0 002-2V10h1a1 1 0 001-1V7a1 1 0 00-1-1h-4z"></path>
+            </svg>
+        </div>
+        <h3 class="text-xl font-medium text-gray-900 mb-2">
+            Nenhum evento encontrado
+        </h3>
+        <p id="empty-message" class="text-gray-600 mb-6">
+            Não há eventos cadastrados no momento.
+        </p>
+        <button
+                id="clear-filters-empty"
+                class="hidden bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+            Limpar filtros
+        </button>
+    </div>
+
+    <!-- Dica de uso -->
+    <div id="usage-tip" class="hidden mt-12 text-center">
+        <p class="text-sm text-gray-500">
+            💡 Dica: Clique em um evento para ver mais detalhes
+        </p>
+    </div>
+</main>
+
+<!-- Modal de Detalhes -->
+<div id="event-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-slide-up">
+        <div id="modal-content">
+            <!-- Conteúdo do modal será inserido aqui -->
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-white border-t mt-16">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="text-center text-gray-600">
+            <p class="mb-2">🌊 Eventos Poços de Caldas</p>
+            <p class="text-sm">Feito com TypeScript puro - Rápido e eficiente</p>
+        </div>
+    </div>
+</footer>
+
+<script type="module">
+    // Tipos TypeScript (simulados em JavaScript)
+
+    // Dados mock para demonstração
+    const mockCategorias = [
+        { id: '1', nome: 'Música', cor: '#EF4444' },
+        { id: '2', nome: 'Teatro', cor: '#8B5CF6' },
+        { id: '3', nome: 'Cinema', cor: '#F59E0B' },
+        { id: '4', nome: 'Gastronomia', cor: '#10B981' },
+        { id: '5', nome: 'Esportes', cor: '#3B82F6' },
+        { id: '6', nome: 'Cultura', cor: '#EC4899' },
+        { id: '7', nome: 'Infantil', cor: '#F97316' }
+    ];
+
+    const mockEventos = [
+        {
+            id: '1',
+            titulo: 'Festival de Inverno de Poços de Caldas',
+            descricao: 'O maior festival de música da região com artistas nacionais e internacionais. Uma celebração da cultura brasileira com shows gratuitos para toda a família.',
+            data_inicio: '2025-07-15T20:00:00',
+            data_fim: '2025-07-15T23:30:00',
+            local: 'Praça Pedro Sanches',
+            endereco: 'Centro, Poços de Caldas - MG',
+            categoria: 'Música',
+            preco: 0,
+            gratuito: true,
+            imagem_url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=250&fit=crop',
+            organizador: 'Prefeitura Municipal',
+            contato: '(35) 3697-2000'
+        },
+        {
+            id: '2',
+            titulo: 'Peça: "O Auto da Compadecida"',
+            descricao: 'Clássico de Ariano Suassuna apresentado pelo grupo local de teatro. Uma adaptação moderna do clássico da literatura brasileira.',
+            data_inicio: '2025-07-08T19:30:00',
+            local: 'Teatro Municipal',
+            endereco: 'Rua Prefeito Chagas, 245 - Centro',
+            categoria: 'Teatro',
+            preco: 25.00,
+            gratuito: false,
+            imagem_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop',
+            organizador: 'Companhia Teatral Caldense',
+            contato: '(35) 99999-9999'
+        },
+        {
+            id: '3',
+            titulo: 'Cinema ao Ar Livre - Sessão Família',
+            descricao: 'Sessão especial de cinema na praça com pipoca gratuita para as crianças. Filmes selecionados para toda a família.',
+            data_inicio: '2025-07-12T19:00:00',
+            local: 'Praça dos Macacos',
+            endereco: 'Centro, Poços de Caldas - MG',
+            categoria: 'Cinema',
+            preco: 0,
+            gratuito: true,
+            imagem_url: 'https://images.unsplash.com/photo-1489599187485-bb79e7df3b0f?w=400&h=250&fit=crop',
+            organizador: 'Secretaria de Cultura'
+        },
+        {
+            id: '4',
+            titulo: 'Festival Gastronômico das Montanhas',
+            descricao: 'Pratos típicos da região com chefs renomados e preços especiais. Descubra os sabores únicos de Minas Gerais.',
+            data_inicio: '2025-07-20T12:00:00',
+            data_fim: '2025-07-20T22:00:00',
+            local: 'Parque José Affonso Junqueira',
+            endereco: 'Vila Togni, Poços de Caldas - MG',
+            categoria: 'Gastronomia',
+            preco: 15.00,
+            gratuito: false,
+            imagem_url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=250&fit=crop',
+            organizador: 'Associação de Restaurantes'
+        },
+        {
+            id: '5',
+            titulo: 'Corrida das Thermas',
+            descricao: 'Corrida de rua de 5km e 10km pelas principais avenidas da cidade. Percurso pelas belas paisagens montanhosas.',
+            data_inicio: '2025-07-25T07:00:00',
+            local: 'Thermas Antônio Carlos',
+            endereco: 'Av. Antônio Carlos, 7600',
+            categoria: 'Esportes',
+            preco: 30.00,
+            gratuito: false,
+            imagem_url: 'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=250&fit=crop',
+            organizador: 'Clube de Corrida PC'
+        },
+        {
+            id: '6',
+            titulo: 'Contação de Histórias no Parque',
+            descricao: 'Atividade lúdica para crianças com contadores de história locais. Desenvolvendo a imaginação e o amor pela leitura.',
+            data_inicio: '2025-07-13T15:00:00',
+            local: 'Parque Municipal Antônio Molinari',
+            endereco: 'Jardim dos Estados',
+            categoria: 'Infantil',
+            preco: 0,
+            gratuito: true,
+            imagem_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop',
+            organizador: 'Biblioteca Municipal'
+        }
+    ];
+
+    // Estado da aplicação
+    let allEvents = [...mockEventos];
+    let filteredEvents = [...mockEventos];
+    let currentFilters = {
+        search: '',
+        category: '',
+        freeOnly: false
+    };
+
+    // Elementos DOM
+    const elements = {
+        searchInput: document.getElementById('search-input'),
+        categorySelect: document.getElementById('category-select'),
+        freeCheckbox: document.getElementById('free-checkbox'),
+        clearFilters: document.getElementById('clear-filters'),
+        clearFiltersEmpty: document.getElementById('clear-filters-empty'),
+        eventsGrid: document.getElementById('events-grid'),
+        eventsCounter: document.getElementById('events-counter'),
+        loadingIndicator: document.getElementById('loading-indicator'),
+        loadingGrid: document.getElementById('loading-grid'),
+        emptyState: document.getElementById('empty-state'),
+        emptyMessage: document.getElementById('empty-message'),
+        usageTip: document.getElementById('usage-tip'),
+        eventModal: document.getElementById('event-modal'),
+        modalContent: document.getElementById('modal-content')
+    };
+
+    // Utilitários de formatação
+    const formatters = {
+        formatDate: (dateString) => {
+            return new Date(dateString).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+        },
+
+        formatFullDate: (dateString) => {
+            return new Date(dateString).toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+        },
+
+        formatTime: (dateString) => {
+            return new Date(dateString).toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        },
+
+        formatPrice: (price) => {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(price);
+        }
+    };
+
+    // Componente EventCard
+    function createEventCard(event) {
+        const categoria = mockCategorias.find(c => c.nome === event.categoria);
+        const dataFormatada = formatters.formatDate(event.data_inicio);
+        const horaFormatada = formatters.formatTime(event.data_inicio);
+
+        return `
+                <div
+                    class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-1 animate-fade-in"
+                    onclick="openEventModal('${event.id}')"
+                >
+                    ${event.imagem_url ? `
+                        <div class="relative">
+                            <img
+                                src="${event.imagem_url}"
+                                alt="${event.titulo}"
+                                class="w-full h-48 object-cover"
+                                loading="lazy"
+                            />
+                            <div class="absolute top-2 right-2">
+                                ${event.gratuito ? `
+                                    <span class="px-2 py-1 bg-green-500 text-white rounded-full text-xs font-medium">
+                                        GRATUITO
+                                    </span>
+                                ` : `
+                                    <span class="px-2 py-1 bg-blue-600 text-white rounded-full text-xs font-medium">
+                                        ${formatters.formatPrice(event.preco)}
+                                    </span>
+                                `}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span
+                                class="px-2 py-1 rounded-full text-xs font-medium text-white"
+                                style="background-color: ${categoria?.cor || '#6B7280'}"
+                            >
+                                ${event.categoria}
+                            </span>
+
+                            <div class="flex items-center text-xs text-gray-500">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                ${horaFormatada}
+                            </div>
+                        </div>
+
+                        <h3 class="font-semibold text-lg mb-2 line-clamp-2">${event.titulo}</h3>
+
+                        <div class="space-y-2 text-sm text-gray-600 mb-3">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4m4 0V7a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1h1v13a2 2 0 002 2h8a2 2 0 002-2V10h1a1 1 0 001-1V7a1 1 0 00-1-1h-4z"></path>
+                                </svg>
+                                <span>${dataFormatada}</span>
+                            </div>
+
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <span class="line-clamp-1">${event.local}</span>
+                            </div>
+                        </div>
+
+                        <p class="text-sm text-gray-700 line-clamp-2">${event.descricao}</p>
+                    </div>
+                </div>
+            `;
+    }
+
+    // Modal do evento
+    function openEventModal(eventId) {
+        const event = allEvents.find(e => e.id === eventId);
+        if (!event) return;
+
+        const categoria = mockCategorias.find(c => c.nome === event.categoria);
+        const dataFormatada = formatters.formatFullDate(event.data_inicio);
+        const horaInicio = formatters.formatTime(event.data_inicio);
+        const horaFim = event.data_fim ? formatters.formatTime(event.data_fim) : null;
+
+        elements.modalContent.innerHTML = `
+                ${event.imagem_url ? `
+                    <div class="relative">
+                        <img
+                            src="${event.imagem_url}"
+                            alt="${event.titulo}"
+                            class="w-full h-64 object-cover"
+                        />
+                        <button
+                            onclick="closeEventModal()"
+                            class="absolute top-4 right-4 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 text-gray-700 transition-colors"
+                        >
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                ` : ''}
+
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span
+                                    class="px-3 py-1 rounded-full text-sm font-medium text-white"
+                                    style="background-color: ${categoria?.cor || '#6B7280'}"
+                                >
+                                    ${event.categoria}
+                                </span>
+
+                                ${event.gratuito ? `
+                                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                                        GRATUITO
+                                    </span>
+                                ` : `
+                                    <span class="text-lg font-bold text-gray-900">
+                                        ${formatters.formatPrice(event.preco)}
+                                    </span>
+                                `}
+                            </div>
+
+                            <h2 class="text-2xl font-bold mb-4">${event.titulo}</h2>
+                        </div>
+
+                        ${!event.imagem_url ? `
+                            <button
+                                onclick="closeEventModal()"
+                                class="text-gray-500 hover:text-gray-700 text-2xl ml-4"
+                            >
+                                ×
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center text-gray-700">
+                                <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4m4 0V7a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1h1v13a2 2 0 002 2h8a2 2 0 002-2V10h1a1 1 0 001-1V7a1 1 0 00-1-1h-4z"></path>
+                                </svg>
+                                <div>
+                                    <div class="font-medium">${dataFormatada}</div>
+                                    <div class="text-sm">
+                                        ${horaInicio}${horaFim ? ` - ${horaFim}` : ''}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start text-gray-700">
+                                <svg class="w-5 h-5 mr-3 mt-0.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <div class="font-medium">${event.local}</div>
+                                    ${event.endereco ? `<div class="text-sm">${event.endereco}</div>` : ''}
+                                </div>
+                            </div>
+
+                            ${event.organizador ? `
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                    <div>
+                                        <div class="font-medium">Organizador</div>
+                                        <div class="text-sm">${event.organizador}</div>
+                                    </div>
+                                </div>
+                            ` : ''}
+
+                            ${event.contato ? `
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 mr-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                    <div>
+                                        <div class="font-medium">Contato</div>
+                                        <div class="text-sm">${event.contato}</div>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold mb-2">Descrição</h3>
+                            <p class="text-gray-700 leading-relaxed">${event.descricao}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button class="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            Adicionar ao Calendário
+                        </button>
+
+                        <button class="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                            </svg>
+                        </button>
+
+                        <button class="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        elements.eventModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEventModal() {
+        elements.eventModal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Filtros
+    function applyFilters() {
+        filteredEvents = allEvents.filter(event => {
+            // Filtro de busca
+            if (currentFilters.search) {
+                const searchTerm = currentFilters.search.toLowerCase();
+                const matchesSearch =
+                    event.titulo.toLowerCase().includes(searchTerm) ||
+                    event.descricao.toLowerCase().includes(searchTerm) ||
+                    event.local.toLowerCase().includes(searchTerm) ||
+                    (event.organizador && event.organizador.toLowerCase().includes(searchTerm));
+
+                if (!matchesSearch) return false;
+            }
+
+            // Filtro de categoria
+            if (currentFilters.category && event.categoria !== currentFilters.category) {
+                return false;
+            }
+
+            // Filtro de eventos gratuitos
+            if (currentFilters.freeOnly && !event.gratuito) {
+                return false;
+            }
+
+            return true;
+        });
+
+        renderEvents();
+        updateUI();
+    }
+
+    function renderEvents() {
+        if (filteredEvents.length === 0) {
+            elements.eventsGrid.innerHTML = '';
+            elements.eventsGrid.classList.add('hidden');
+            elements.emptyState.classList.remove('hidden');
+            elements.usageTip.classList.add('hidden');
+
+            const hasActiveFilters = currentFilters.search || currentFilters.category || currentFilters.freeOnly;
+            elements.emptyMessage.textContent = hasActiveFilters
+                ? 'Tente ajustar os filtros para encontrar mais eventos.'
+                : 'Não há eventos cadastrados no momento.';
+
+            elements.clearFiltersEmpty.classList.toggle('hidden', !hasActiveFilters);
+        } else {
+            elements.eventsGrid.innerHTML = filteredEvents.map(createEventCard).join('');
+            elements.eventsGrid.classList.remove('hidden');
+            elements.emptyState.classList.add('hidden');
+            elements.usageTip.classList.remove('hidden');
+        }
+    }
+
+    function updateUI() {
+        // Contador de eventos
+        const count = filteredEvents.length;
+        elements.eventsCounter.textContent = `${count} ${count === 1 ? 'evento encontrado' : 'eventos encontrados'}`;
+
+        // Botão de limpar filtros
+        const hasActiveFilters = currentFilters.search || currentFilters.category || currentFilters.freeOnly;
+        elements.clearFilters.classList.toggle('hidden', !hasActiveFilters);
+    }
+
+    function clearAllFilters() {
+        currentFilters = { search: '', category: '', freeOnly: false };
+        elements.searchInput.value = '';
+        elements.categorySelect.value = '';
+        elements.freeCheckbox.checked = false;
+        applyFilters();
+    }
+
+    // Simulação de carregamento
+    function showLoading() {
+        elements.loadingIndicator.classList.remove('hidden');
+        elements.loadingGrid.classList.remove('hidden');
+        elements.eventsGrid.classList.add('hidden');
+        elements.emptyState.classList.add('hidden');
+        elements.usageTip.classList.add('hidden');
+    }
+
+    function hideLoading() {
+        elements.loadingIndicator.classList.add('hidden');
+        elements.loadingGrid.classList.add('hidden');
+    }
+
+    async function loadEvents() {
+        showLoading();
+
+        // Simula carregamento da API
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        hideLoading();
+        renderEvents();
+        updateUI();
+    }
+
+    function loadCategories() {
+        // Popula o select de categorias
+        mockCategorias.forEach(categoria => {
+            const option = document.createElement('option');
+            option.value = categoria.nome;
+            option.textContent = categoria.nome;
+            elements.categorySelect.appendChild(option);
+        });
+    }
+
+    // Event listeners
+    function setupEventListeners() {
+        // Busca
+        let searchTimeout;
+        elements.searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentFilters.search = e.target.value;
+                applyFilters();
+            }, 300);
+        });
+
+        // Categoria
+        elements.categorySelect.addEventListener('change', (e) => {
+            currentFilters.category = e.target.value;
+            applyFilters();
+        });
+
+        // Eventos gratuitos
+        elements.freeCheckbox.addEventListener('change', (e) => {
+            currentFilters.freeOnly = e.target.checked;
+            applyFilters();
+        });
+
+        // Limpar filtros
+        elements.clearFilters.addEventListener('click', clearAllFilters);
+        elements.clearFiltersEmpty.addEventListener('click', clearAllFilters);
+
+        // Modal
+        elements.eventModal.addEventListener('click', (e) => {
+            if (e.target === elements.eventModal) {
+                closeEventModal();
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !elements.eventModal.classList.contains('hidden')) {
+                closeEventModal();
+            }
+        });
+    }
+
+    // Tornar funções globais para onclick
+    window.openEventModal = openEventModal;
+    window.closeEventModal = closeEventModal;
+
+    // Inicialização
+    function init() {
+        loadCategories();
+        setupEventListeners();
+        loadEvents();
+    }
+
+    // Iniciar app quando DOM estiver pronto
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+</script>
+</body>
+</html>
