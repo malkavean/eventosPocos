@@ -511,13 +511,28 @@
   // Utilitários
   const formatDate = (dateString) => {
     if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    try {
+      const date = new Date(dateString);
+
+      if (isNaN(date.getTime())) {
+        console.error('Data inválida no admin:', dateString);
+        return dateString;
+      }
+
+      // Ajustar 3 horas para compensar o timezone
+      const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
+
+      return adjustedDate.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      console.error('Erro ao formatar data no admin:', dateString, error);
+      return dateString;
+    }
   };
 
   const formatPrice = (price) => {
@@ -708,13 +723,28 @@
 
       elements.modalTitle.textContent = 'Editar Evento';
 
+      // Função auxiliar para ajustar data para edição
+      function adjustDateForEdit(dateString) {
+        if (!dateString) return '';
+        try {
+          const date = new Date(dateString);
+          if (isNaN(date.getTime())) return '';
+
+          // Ajustar 3 horas e formatar para datetime-local
+          const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
+          return adjustedDate.toISOString().slice(0, 16);
+        } catch (error) {
+          console.error('Erro ao ajustar data para edição:', dateString, error);
+          return '';
+        }
+      }
       // Preencher formulário
       document.getElementById('event-id').value = event.id;
       document.getElementById('titulo').value = event.titulo;
       document.getElementById('categoria').value = event.categoria;
       document.getElementById('imagem_url').value = event.imagem_url || '';
-      document.getElementById('data_inicio').value = event.data_inicio ? event.data_inicio.slice(0, 16) : '';
-      document.getElementById('data_fim').value = event.data_fim ? event.data_fim.slice(0, 16) : '';
+      document.getElementById('data_inicio').value = adjustDateForEdit(event.data_inicio);
+      document.getElementById('data_fim').value = adjustDateForEdit(event.data_fim);
       document.getElementById('local').value = event.local;
       document.getElementById('endereco').value = event.endereco || '';
       document.getElementById('preco').value = event.preco || '';

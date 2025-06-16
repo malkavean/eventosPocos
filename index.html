@@ -580,40 +580,73 @@
 
     // Utilitários de formatação
     const formatters = {
-        formatDate: (dateString) => {
-            if (!dateString) return '';
-            // Interpretar como horário local
-            const date = new Date(dateString + 'T00:00:00');
-            return date.toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            });
-        },
+            formatDate: (dateString) => {
+                if (!dateString) return '';
+                try {
+                    // Se a string não contém timezone, assume horário local
+                    const date = dateString.includes('T') ?
+                        new Date(dateString) :
+                        new Date(dateString + 'T00:00:00');
 
-        formatTime: (dateString) => {
-            if (!dateString) return '';
-            // Interpretar como horário local
-            const date = new Date(dateString);
-            // Ajustar para timezone local
-            const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-            return localDate.toLocaleTimeString('pt-BR', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        },
+                    return date.toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                } catch (error) {
+                    console.error('Erro ao formatar data:', dateString, error);
+                    return dateString; // Retorna string original se houver erro
+                }
+            },
 
-        formatFullDate: (dateString) => {
-            if (!dateString) return '';
-            const date = new Date(dateString);
-            const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-            return localDate.toLocaleDateString('pt-BR', {
-                weekday: 'long',
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
-            });
-        },
+            formatTime: (dateString) => {
+                if (!dateString) return '';
+                try {
+                    const date = new Date(dateString);
+
+                    // Verificar se a data é válida
+                    if (isNaN(date.getTime())) {
+                        console.error('Data inválida:', dateString);
+                        return '';
+                    }
+
+                    // Ajustar 3 horas para compensar o timezone (GMT-3)
+                    const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
+
+                    return adjustedDate.toLocaleTimeString('pt-BR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                } catch (error) {
+                    console.error('Erro ao formatar hora:', dateString, error);
+                    return '';
+                }
+            },
+
+            formatFullDate: (dateString) => {
+                if (!dateString) return '';
+                try {
+                    const date = new Date(dateString);
+
+                    if (isNaN(date.getTime())) {
+                        console.error('Data inválida:', dateString);
+                        return dateString;
+                    }
+
+                    // Ajustar 3 horas para compensar o timezone
+                    const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
+
+                    return adjustedDate.toLocaleDateString('pt-BR', {
+                        weekday: 'long',
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                } catch (error) {
+                    console.error('Erro ao formatar data completa:', dateString, error);
+                    return dateString;
+                }
+            },
 
         formatPrice: (price) => {
             return new Intl.NumberFormat('pt-BR', {
