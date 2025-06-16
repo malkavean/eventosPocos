@@ -15,6 +15,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eventos Poços de Caldas - Agenda Cultural Completa | Shows, Teatro, Cinema</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
     <meta name="description" content="Descubra os melhores eventos em Poços de Caldas - MG. Shows, teatro, cinema, gastronomia e muito mais na cidade das águas termais. Agenda cultural atualizada diariamente.">
     <meta name="keywords" content="eventos poços de caldas, shows, teatro, cinema, gastronomia, cultura, entretenimento, minas gerais, agenda cultural, eventos gratuitos, festival">
     <meta name="author" content="Eventos Poços de Caldas">
@@ -142,11 +148,47 @@
 <header class="bg-white shadow-sm border-b">
     <div class="max-w-7xl mx-auto px-4 py-6">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div class="mb-4 md:mb-0">
-                <h1 class="text-3xl font-bold text-gray-900">
-                    Eventos em Poços de Caldas
-                </h1>
-                <p class="text-gray-600 mt-1">Descubra o que está acontecendo na cidade das águas termais</p>
+            <div class="mb-4 md:mb-0 flex items-center gap-4">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="160" height="48" class="hover:scale-105 transition-transform duration-300">
+                        <defs>
+                            <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="volcano-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#4c1d95;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="0" width="200" height="60" rx="30" fill="url(#bg-gradient)"/>
+                        <g transform="translate(20, 15)">
+                            <path d="M5 30 L10 20 L15 15 L20 20 L25 30 Z" fill="url(#volcano-gradient)" stroke="#ffffff" stroke-width="1"/>
+                            <ellipse cx="15" cy="20" rx="4" ry="2" fill="#ef4444"/>
+                            <circle cx="12" cy="18" r="1.5" fill="rgba(255,255,255,0.8)"/>
+                            <circle cx="18" cy="18" r="1.2" fill="rgba(255,255,255,0.6)"/>
+                            <circle cx="15" cy="14" r="1" fill="rgba(255,255,255,0.5)"/>
+                            <circle cx="13" cy="12" r="0.8" fill="rgba(255,255,255,0.3)"/>
+                            <circle cx="17" cy="12" r="0.6" fill="rgba(255,255,255,0.2)"/>
+                        </g>
+                        <text x="60" y="25" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">EVENTOS</text>
+                        <text x="60" y="40" fill="rgba(255,255,255,0.9)" font-family="Arial, sans-serif" font-size="11">Poços de Caldas</text>
+                        <g transform="translate(150, 20)">
+                            <path d="M0 10 Q5 5 10 10 T20 10" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none"/>
+                            <path d="M0 15 Q5 10 10 15 T20 15" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="none"/>
+                            <path d="M0 20 Q5 15 10 20 T20 20" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Textos -->
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        Eventos em Poços de Caldas
+                    </h1>
+                    <p class="text-gray-600 mt-1">Descubra o que está acontecendo na cidade das águas termais</p>
+                </div>
             </div>
 
             <div class="flex items-center gap-4">
