@@ -1,20 +1,86 @@
-<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eventos Poços de Caldas</title>
+<meta name="description" content="Descubra os melhores eventos em Poços de Caldas - MG. Shows, teatro, cinema, gastronomia e muito mais na cidade das águas termais.">
+<meta name="keywords" content="eventos poços de caldas, shows, teatro, cinema, gastronomia, cultura, entretenimento, minas gerais">
+<meta name="author" content="Eventos Poços de Caldas">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://eventospocoscaldas.com/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://eventospocoscaldas.com/">
+<meta property="og:title" content="Eventos em Poços de Caldas">
 <html lang="pt-BR">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eventos Poços de Caldas</title>
-    <meta name="description" content="Descubra os melhores eventos em Poços de Caldas - MG">
+    <title>Eventos Poços de Caldas - Agenda Cultural Completa | Shows, Teatro, Cinema</title>
+    <meta name="description" content="Descubra os melhores eventos em Poços de Caldas - MG. Shows, teatro, cinema, gastronomia e muito mais na cidade das águas termais. Agenda cultural atualizada diariamente.">
+    <meta name="keywords" content="eventos poços de caldas, shows, teatro, cinema, gastronomia, cultura, entretenimento, minas gerais, agenda cultural, eventos gratuitos, festival">
+    <meta name="author" content="Eventos Poços de Caldas">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://eventospocoscaldas.com/">
 
-    <!-- Google tag (gtag.js) -->
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://eventospocoscaldas.com/">
+    <meta property="og:title" content="Eventos em Poços de Caldas - Agenda Cultural Completa">
+    <meta property="og:description" content="Descubra os melhores eventos em Poços de Caldas - MG. Shows, teatro, cinema, gastronomia e muito mais.">
+    <meta property="og:image" content="https://eventospocoscaldas.com/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://eventospocoscaldas.com/">
+    <meta property="twitter:title" content="Eventos em Poços de Caldas - Agenda Cultural Completa">
+    <meta property="twitter:description" content="Descubra os melhores eventos em Poços de Caldas - MG. Shows, teatro, cinema, gastronomia e muito mais.">
+    <meta property="twitter:image" content="https://eventospocoscaldas.com/og-image.jpg">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Eventos Poços de Caldas",
+            "description": "Agenda cultural completa de Poços de Caldas - MG",
+            "url": "https://eventospocoscaldas.com",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://eventospocoscaldas.com/?search={search_term_string}",
+                "query-input": "required name=search_term_string"
+            },
+            "areaServed": {
+                "@type": "City",
+                "name": "Poços de Caldas",
+                "addressRegion": "MG",
+                "addressCountry": "BR"
+            }
+        }
+    </script>
+
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VBVMSV61WD"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-VBVMSV61WD');
+
+        // Track event views
+        function trackEventView(eventName) {
+            gtag('event', 'view_event', {
+                'event_category': 'Events',
+                'event_label': eventName
+            });
+        }
+
+        // Track shares
+        function trackShare(eventName) {
+            gtag('event', 'share', {
+                'event_category': 'Events',
+                'event_label': eventName,
+                'method': 'web_share'
+            });
+        }
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -222,6 +288,56 @@
         </p>
     </div>
 
+    <!-- SEO Content Section -->
+    <section class="mt-16 bg-white rounded-xl shadow-sm p-8">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+                Eventos em Poços de Caldas - Sua Agenda Cultural Completa
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8 text-gray-700">
+                <div>
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800">🎭 Diversidade Cultural</h3>
+                    <p class="leading-relaxed mb-4">
+                        Descubra a rica agenda cultural de Poços de Caldas, a famosa cidade das águas termais.
+                        Nossa plataforma reúne shows, peças de teatro, sessões de cinema, festivais gastronômicos,
+                        eventos esportivos e muito mais.
+                    </p>
+
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800">🎵 Shows e Música</h3>
+                    <p class="leading-relaxed">
+                        Acompanhe os melhores shows que acontecem na cidade, desde grandes festivais como o
+                        Festival de Inverno até apresentações intimistas em bares e casas de show locais.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800">🍽️ Gastronomia</h3>
+                    <p class="leading-relaxed mb-4">
+                        Explore os eventos gastronômicos que celebram a culinária mineira e internacional.
+                        Festivais, degustações, jantares especiais e muito mais para os amantes da boa comida.
+                    </p>
+
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800">🎪 Eventos Gratuitos</h3>
+                    <p class="leading-relaxed">
+                        Encontre facilmente eventos gratuitos para toda a família. Cinema ao ar livre,
+                        apresentações em praças, oficinas culturais e atividades que não custam nada.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-blue-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold mb-3 text-blue-900">🌊 Por que Poços de Caldas?</h3>
+                <p class="text-blue-800 leading-relaxed">
+                    Conhecida nacionalmente por suas águas termais e belezas naturais, Poços de Caldas
+                    também se destaca como um importante centro cultural do sul de Minas Gerais. A cidade
+                    oferece uma agenda diversificada que atende todos os gostos e idades, consolidando-se
+                    como destino cultural imperdível da região.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- Erro de conexão -->
     <div id="connection-error" class="hidden text-center py-16">
         <div class="text-red-400 mb-4">
@@ -258,7 +374,18 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="text-center text-gray-600">
             <p class="mb-2">🌊 Eventos Poços de Caldas</p>
-            <p class="text-sm">Conectado ao Supabase - Dados em tempo real</p>
+            <p class="text-sm mb-3">Conectado ao Supabase - Dados em tempo real</p>
+            <div class="flex justify-center gap-6 text-sm">
+                <a href="privacy.html" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    Política de Privacidade
+                </a>
+                <a href="terms.html" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    Termos de Uso
+                </a>
+                <a href="mailto:contato@eventospocoscaldas.com" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    Contato
+                </a>
+            </div>
         </div>
     </div>
 </footer>
@@ -451,6 +578,15 @@
         const event = allEvents.find(e => e.id == eventId);
         if (!event) return;
 
+        // Track event view
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'view_event', {
+                'event_category': 'Events',
+                'event_label': event.titulo,
+                'event_id': eventId
+            });
+        }
+
         const categoria = categorias.find(c => c.nome === event.categoria);
         const dataFormatada = formatters.formatFullDate(event.data_inicio);
         const horaInicio = formatters.formatTime(event.data_inicio);
@@ -601,6 +737,15 @@
     function shareEvent() {
         const event = allEvents.find(e => e.id == window.currentEventId);
         if (!event) return;
+
+        // Track share event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'share', {
+                'event_category': 'Events',
+                'event_label': event.titulo,
+                'method': 'web_share'
+            });
+        }
 
         const eventUrl = `${window.location.origin}${window.location.pathname}?evento=${event.id}`;
         const shareText = `📅 ${event.titulo}\n🗓️ ${formatters.formatFullDate(event.data_inicio)}\n📍 ${event.local}\n\n${event.descricao}\n\n🔗 ${eventUrl}`;

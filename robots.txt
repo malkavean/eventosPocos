@@ -1,0 +1,34 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+
+# Sitemap
+Sitemap: https://eventospocoscaldas.com/sitemap.xml
+
+# Crawl-delay (opcional - reduz carga no servidor)
+Crawl-delay: 1
+
+# Permitir todos os recursos importantes
+Allow: /index.html
+Allow: /privacy.html
+Allow: /terms.html
+Allow: *.css
+Allow: *.js
+Allow: *.png
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.gif
+Allow: *.svg
+
+# Google bots específicos
+User-agent: Googlebot
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
