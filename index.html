@@ -6,6 +6,7 @@
     <title>Eventos Poços de Caldas</title>
     <meta name="description" content="Descubra os melhores eventos em Poços de Caldas - MG">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -36,6 +37,12 @@
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -72,6 +79,14 @@
                     </svg>
                     <span class="text-sm">Carregando...</span>
                 </div>
+
+                <button
+                        id="refresh-btn"
+                        class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        title="Atualizar eventos"
+                >
+                    🔄 Atualizar
+                </button>
 
                 <div id="events-counter" class="text-sm text-gray-500">
                     0 eventos encontrados
@@ -194,6 +209,27 @@
             💡 Dica: Clique em um evento para ver mais detalhes
         </p>
     </div>
+
+    <!-- Erro de conexão -->
+    <div id="connection-error" class="hidden text-center py-16">
+        <div class="text-red-400 mb-4">
+            <svg class="w-20 h-20 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <h3 class="text-xl font-medium text-gray-900 mb-2">
+            Erro de conexão
+        </h3>
+        <p class="text-gray-600 mb-6">
+            Não foi possível carregar os eventos. Tente novamente.
+        </p>
+        <button
+                id="retry-connection"
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+            Tentar novamente
+        </button>
+    </div>
 </main>
 
 <!-- Modal de Detalhes -->
@@ -210,16 +246,21 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="text-center text-gray-600">
             <p class="mb-2">🌊 Eventos Poços de Caldas</p>
-            <p class="text-sm">Feito com TypeScript puro - Rápido e eficiente</p>
+            <p class="text-sm">Conectado ao Supabase - Dados em tempo real</p>
         </div>
     </div>
 </footer>
 
 <script type="module">
-    // Tipos TypeScript (simulados em JavaScript)
+    // Configuração do Supabase
+    const SUPABASE_URL = 'https://nikhfwdgormvgrlprcun.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5pa2hmd2Rnb3JtdmdybHByY3VuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwNzI5NzcsImV4cCI6MjA2NTY0ODk3N30.pIbX4ZwDBXIGRhGFGU_TCd0ZYqSO3jN1RKQHZo6DL3A';
 
-    // Dados mock para demonstração
-    const mockCategorias = [
+    // Inicializar Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Dados de categorias com cores
+    const categorias = [
         { id: '1', nome: 'Música', cor: '#EF4444' },
         { id: '2', nome: 'Teatro', cor: '#8B5CF6' },
         { id: '3', nome: 'Cinema', cor: '#F59E0B' },
@@ -229,99 +270,15 @@
         { id: '7', nome: 'Infantil', cor: '#F97316' }
     ];
 
-    const mockEventos = [
-        {
-            id: '1',
-            titulo: 'Festival de Inverno de Poços de Caldas',
-            descricao: 'O maior festival de música da região com artistas nacionais e internacionais. Uma celebração da cultura brasileira com shows gratuitos para toda a família.',
-            data_inicio: '2025-07-15T20:00:00',
-            data_fim: '2025-07-15T23:30:00',
-            local: 'Praça Pedro Sanches',
-            endereco: 'Centro, Poços de Caldas - MG',
-            categoria: 'Música',
-            preco: 0,
-            gratuito: true,
-            imagem_url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=250&fit=crop',
-            organizador: 'Prefeitura Municipal',
-            contato: '(35) 3697-2000'
-        },
-        {
-            id: '2',
-            titulo: 'Peça: "O Auto da Compadecida"',
-            descricao: 'Clássico de Ariano Suassuna apresentado pelo grupo local de teatro. Uma adaptação moderna do clássico da literatura brasileira.',
-            data_inicio: '2025-07-08T19:30:00',
-            local: 'Teatro Municipal',
-            endereco: 'Rua Prefeito Chagas, 245 - Centro',
-            categoria: 'Teatro',
-            preco: 25.00,
-            gratuito: false,
-            imagem_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop',
-            organizador: 'Companhia Teatral Caldense',
-            contato: '(35) 99999-9999'
-        },
-        {
-            id: '3',
-            titulo: 'Cinema ao Ar Livre - Sessão Família',
-            descricao: 'Sessão especial de cinema na praça com pipoca gratuita para as crianças. Filmes selecionados para toda a família.',
-            data_inicio: '2025-07-12T19:00:00',
-            local: 'Praça dos Macacos',
-            endereco: 'Centro, Poços de Caldas - MG',
-            categoria: 'Cinema',
-            preco: 0,
-            gratuito: true,
-            imagem_url: 'https://images.unsplash.com/photo-1489599187485-bb79e7df3b0f?w=400&h=250&fit=crop',
-            organizador: 'Secretaria de Cultura'
-        },
-        {
-            id: '4',
-            titulo: 'Festival Gastronômico das Montanhas',
-            descricao: 'Pratos típicos da região com chefs renomados e preços especiais. Descubra os sabores únicos de Minas Gerais.',
-            data_inicio: '2025-07-20T12:00:00',
-            data_fim: '2025-07-20T22:00:00',
-            local: 'Parque José Affonso Junqueira',
-            endereco: 'Vila Togni, Poços de Caldas - MG',
-            categoria: 'Gastronomia',
-            preco: 15.00,
-            gratuito: false,
-            imagem_url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=250&fit=crop',
-            organizador: 'Associação de Restaurantes'
-        },
-        {
-            id: '5',
-            titulo: 'Corrida das Thermas',
-            descricao: 'Corrida de rua de 5km e 10km pelas principais avenidas da cidade. Percurso pelas belas paisagens montanhosas.',
-            data_inicio: '2025-07-25T07:00:00',
-            local: 'Thermas Antônio Carlos',
-            endereco: 'Av. Antônio Carlos, 7600',
-            categoria: 'Esportes',
-            preco: 30.00,
-            gratuito: false,
-            imagem_url: 'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=250&fit=crop',
-            organizador: 'Clube de Corrida PC'
-        },
-        {
-            id: '6',
-            titulo: 'Contação de Histórias no Parque',
-            descricao: 'Atividade lúdica para crianças com contadores de história locais. Desenvolvendo a imaginação e o amor pela leitura.',
-            data_inicio: '2025-07-13T15:00:00',
-            local: 'Parque Municipal Antônio Molinari',
-            endereco: 'Jardim dos Estados',
-            categoria: 'Infantil',
-            preco: 0,
-            gratuito: true,
-            imagem_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop',
-            organizador: 'Biblioteca Municipal'
-        }
-    ];
-
     // Estado da aplicação
-    let allEvents = [...mockEventos];
-    let filteredEvents = [...mockEventos];
+    let allEvents = [];
+    let filteredEvents = [];
     let currentFilters = {
         search: '',
         category: '',
         freeOnly: false
     };
+    let isConnected = false;
 
     // Elementos DOM
     const elements = {
@@ -338,12 +295,36 @@
         emptyMessage: document.getElementById('empty-message'),
         usageTip: document.getElementById('usage-tip'),
         eventModal: document.getElementById('event-modal'),
-        modalContent: document.getElementById('modal-content')
+        modalContent: document.getElementById('modal-content'),
+        connectionError: document.getElementById('connection-error'),
+        refreshBtn: document.getElementById('refresh-btn'),
+        retryConnection: document.getElementById('retry-connection')
     };
+
+    // Carregar eventos do Supabase
+    async function loadEventsFromDatabase() {
+        try {
+            const { data, error } = await supabase
+                .from('eventos')
+                .select('*')
+                .order('data_inicio', { ascending: true });
+
+            if (error) {
+                console.error('Erro Supabase:', error);
+                throw error;
+            }
+
+            return data || [];
+        } catch (error) {
+            console.error('Erro ao carregar eventos:', error);
+            throw error;
+        }
+    }
 
     // Utilitários de formatação
     const formatters = {
         formatDate: (dateString) => {
+            if (!dateString) return '';
             return new Date(dateString).toLocaleDateString('pt-BR', {
                 day: '2-digit',
                 month: 'short',
@@ -352,6 +333,7 @@
         },
 
         formatFullDate: (dateString) => {
+            if (!dateString) return '';
             return new Date(dateString).toLocaleDateString('pt-BR', {
                 weekday: 'long',
                 day: '2-digit',
@@ -361,6 +343,7 @@
         },
 
         formatTime: (dateString) => {
+            if (!dateString) return '';
             return new Date(dateString).toLocaleTimeString('pt-BR', {
                 hour: '2-digit',
                 minute: '2-digit'
@@ -371,13 +354,13 @@
             return new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL'
-            }).format(price);
+            }).format(price || 0);
         }
     };
 
     // Componente EventCard
     function createEventCard(event) {
-        const categoria = mockCategorias.find(c => c.nome === event.categoria);
+        const categoria = categorias.find(c => c.nome === event.categoria);
         const dataFormatada = formatters.formatDate(event.data_inicio);
         const horaFormatada = formatters.formatTime(event.data_inicio);
 
@@ -393,6 +376,7 @@
                                 alt="${event.titulo}"
                                 class="w-full h-48 object-cover"
                                 loading="lazy"
+                                onerror="this.style.display='none'"
                             />
                             <div class="absolute top-2 right-2">
                                 ${event.gratuito ? `
@@ -452,10 +436,10 @@
 
     // Modal do evento
     function openEventModal(eventId) {
-        const event = allEvents.find(e => e.id === eventId);
+        const event = allEvents.find(e => e.id == eventId);
         if (!event) return;
 
-        const categoria = mockCategorias.find(c => c.nome === event.categoria);
+        const categoria = categorias.find(c => c.nome === event.categoria);
         const dataFormatada = formatters.formatFullDate(event.data_inicio);
         const horaInicio = formatters.formatTime(event.data_inicio);
         const horaFim = event.data_fim ? formatters.formatTime(event.data_fim) : null;
@@ -467,6 +451,7 @@
                             src="${event.imagem_url}"
                             alt="${event.titulo}"
                             class="w-full h-64 object-cover"
+                            onerror="this.style.display='none'"
                         />
                         <button
                             onclick="closeEventModal()"
@@ -571,20 +556,21 @@
                     </div>
 
                     <div class="flex gap-3">
-                        <button class="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                            Adicionar ao Calendário
-                        </button>
-
-                        <button class="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <button
+                            onclick="shareEvent()"
+                            class="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                        >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
                             </svg>
+                            Compartilhar
                         </button>
 
-                        <button class="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                            </svg>
+                        <button
+                            onclick="closeEventModal()"
+                            class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                        >
+                            Fechar
                         </button>
                     </div>
                 </div>
@@ -597,6 +583,50 @@
     function closeEventModal() {
         elements.eventModal.classList.add('hidden');
         document.body.style.overflow = 'auto';
+    }
+
+    // Função simples de compartilhamento
+    function shareEvent() {
+        const event = allEvents.find(e => e.id == window.currentEventId);
+        if (!event) return;
+
+        const eventUrl = `${window.location.origin}${window.location.pathname}?evento=${event.id}`;
+        const shareText = `📅 ${event.titulo}\n🗓️ ${formatters.formatFullDate(event.data_inicio)}\n📍 ${event.local}\n\n${event.descricao}\n\n🔗 ${eventUrl}`;
+
+        // Tentar usar Web Share API se disponível
+        if (navigator.share) {
+            navigator.share({
+                title: `Evento: ${event.titulo}`,
+                text: shareText,
+                url: eventUrl
+            }).catch(err => console.log('Erro ao compartilhar:', err));
+        } else {
+            // Fallback - copiar para clipboard
+            navigator.clipboard.writeText(shareText).then(() => {
+                showSimpleToast('Informações copiadas para área de transferência!');
+            }).catch(() => {
+                // Fallback ainda mais simples
+                const textArea = document.createElement('textarea');
+                textArea.value = shareText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showSimpleToast('Informações copiadas para área de transferência!');
+            });
+        }
+    }
+
+    // Toast simples
+    function showSimpleToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
     }
 
     // Filtros
@@ -670,13 +700,14 @@
         applyFilters();
     }
 
-    // Simulação de carregamento
+    // Estados de carregamento e erro
     function showLoading() {
         elements.loadingIndicator.classList.remove('hidden');
         elements.loadingGrid.classList.remove('hidden');
         elements.eventsGrid.classList.add('hidden');
         elements.emptyState.classList.add('hidden');
         elements.usageTip.classList.add('hidden');
+        elements.connectionError.classList.add('hidden');
     }
 
     function hideLoading() {
@@ -684,23 +715,45 @@
         elements.loadingGrid.classList.add('hidden');
     }
 
+    function showConnectionError() {
+        elements.connectionError.classList.remove('hidden');
+        elements.eventsGrid.classList.add('hidden');
+        elements.emptyState.classList.add('hidden');
+        elements.usageTip.classList.add('hidden');
+    }
+
+    // Carregar eventos
     async function loadEvents() {
         showLoading();
 
-        // Simula carregamento da API
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        try {
+            allEvents = await loadEventsFromDatabase();
+            filteredEvents = [...allEvents];
+            isConnected = true;
 
-        hideLoading();
-        renderEvents();
-        updateUI();
+            hideLoading();
+            loadCategories();
+            renderEvents();
+            updateUI();
+        } catch (error) {
+            console.error('Erro ao carregar eventos:', error);
+            hideLoading();
+            showConnectionError();
+            isConnected = false;
+        }
     }
 
     function loadCategories() {
-        // Popula o select de categorias
-        mockCategorias.forEach(categoria => {
+        // Limpar opções existentes (exceto "Todas as categorias")
+        elements.categorySelect.innerHTML = '<option value="">Todas as categorias</option>';
+
+        // Obter categorias únicas dos eventos
+        const categoriesInUse = [...new Set(allEvents.map(event => event.categoria))].sort();
+
+        categoriesInUse.forEach(categoria => {
             const option = document.createElement('option');
-            option.value = categoria.nome;
-            option.textContent = categoria.nome;
+            option.value = categoria;
+            option.textContent = categoria;
             elements.categorySelect.appendChild(option);
         });
     }
@@ -733,6 +786,10 @@
         elements.clearFilters.addEventListener('click', clearAllFilters);
         elements.clearFiltersEmpty.addEventListener('click', clearAllFilters);
 
+        // Botão de atualizar
+        elements.refreshBtn.addEventListener('click', loadEvents);
+        elements.retryConnection.addEventListener('click', loadEvents);
+
         // Modal
         elements.eventModal.addEventListener('click', (e) => {
             if (e.target === elements.eventModal) {
@@ -746,15 +803,45 @@
                 closeEventModal();
             }
         });
+
+        // Configurar real-time updates do Supabase
+        setupRealtimeUpdates();
+    }
+
+    // Configurar atualizações em tempo real
+    function setupRealtimeUpdates() {
+        const channel = supabase
+            .channel('eventos_changes')
+            .on('postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'eventos'
+                },
+                (payload) => {
+                    console.log('Mudança detectada:', payload);
+                    // Recarregar eventos quando houver mudanças
+                    loadEvents();
+                }
+            )
+            .subscribe();
+
+        // Limpar subscription quando a página for fechada
+        window.addEventListener('beforeunload', () => {
+            supabase.removeChannel(channel);
+        });
     }
 
     // Tornar funções globais para onclick
-    window.openEventModal = openEventModal;
+    window.openEventModal = function(eventId) {
+        window.currentEventId = eventId;
+        openEventModal(eventId);
+    };
     window.closeEventModal = closeEventModal;
+    window.shareEvent = shareEvent;
 
     // Inicialização
     function init() {
-        loadCategories();
         setupEventListeners();
         loadEvents();
     }
