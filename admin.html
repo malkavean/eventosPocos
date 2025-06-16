@@ -866,9 +866,10 @@
 
     // Fechar modais clicando fora
     elements.eventModal.addEventListener('click', (e) => {
-      if (e.target === elements.eventModal) {
-        closeModal();
-      }
+      // Remover o fechamento do modal de evento clicando fora
+      // if (e.target === elements.eventModal) {
+      //     closeModal();
+      // }
     });
 
     elements.deleteModal.addEventListener('click', (e) => {
