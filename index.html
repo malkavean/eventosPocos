@@ -9,7 +9,7 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://eventospocoscaldas.com/">
-<meta property="og:title" content="Eventos em Poços de<!DOCTYPE html>
+<meta property="og:title" content="Eventos em Poços de Caldas">
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -118,6 +118,10 @@
                 transform: translateY(0);
             }
         }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -141,11 +145,54 @@
                 opacity: .5;
             }
         }
+
+        /* Background personalizado */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Overlay pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 50px 50px, 80px 80px, 60px 60px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Melhoria nos cards para contrastar com o fundo */
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
 <!-- Header -->
-<header class="bg-white shadow-sm border-b">
+<header class="glass-effect shadow-lg border-b border-white/20">
     <div class="max-w-7xl mx-auto px-4 py-6">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
             <div class="mb-4 md:mb-0 flex items-center gap-4">
@@ -219,7 +266,7 @@
 <!-- Main Content -->
 <main class="max-w-7xl mx-auto px-4 py-6">
     <!-- Filtros -->
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+    <div class="glass-effect rounded-xl card-shadow p-6 mb-8">
         <div class="flex flex-col lg:flex-row gap-4">
             <!-- Busca -->
             <div class="flex-1">
@@ -268,7 +315,7 @@
 
     <!-- Loading State -->
     <div id="loading-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+        <div class="glass-effect rounded-lg card-shadow overflow-hidden animate-pulse">
             <div class="h-48 bg-gray-200"></div>
             <div class="p-4">
                 <div class="h-4 bg-gray-200 rounded mb-2"></div>
@@ -277,7 +324,7 @@
                 <div class="h-4 bg-gray-200 rounded w-3/4"></div>
             </div>
         </div>
-        <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+        <div class="glass-effect rounded-lg card-shadow overflow-hidden animate-pulse">
             <div class="h-48 bg-gray-200"></div>
             <div class="p-4">
                 <div class="h-4 bg-gray-200 rounded mb-2"></div>
@@ -286,7 +333,7 @@
                 <div class="h-4 bg-gray-200 rounded w-3/4"></div>
             </div>
         </div>
-        <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+        <div class="glass-effect rounded-lg card-shadow overflow-hidden animate-pulse">
             <div class="h-48 bg-gray-200"></div>
             <div class="p-4">
                 <div class="h-4 bg-gray-200 rounded mb-2"></div>
@@ -331,7 +378,7 @@
     </div>
 
     <!-- SEO Content Section -->
-    <section class="mt-16 bg-white rounded-xl shadow-sm p-8">
+    <section class="mt-16 glass-effect rounded-xl card-shadow p-8">
         <div class="max-w-4xl mx-auto">
             <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
                 Eventos em Poços de Caldas - Sua Agenda Cultural Completa
@@ -368,7 +415,7 @@
                 </div>
             </div>
 
-            <div class="mt-8 bg-blue-50 rounded-lg p-6">
+            <div class="mt-8 bg-gradient-to-r from-blue-50/80 to-purple-50/80 backdrop-blur-sm rounded-lg p-6 border border-white/30">
                 <h3 class="text-lg font-semibold mb-3 text-blue-900">🌊 Por que Poços de Caldas?</h3>
                 <p class="text-blue-800 leading-relaxed">
                     Conhecida nacionalmente por suas águas termais e belezas naturais, Poços de Caldas
@@ -412,7 +459,7 @@
 </div>
 
 <!-- Footer -->
-<footer class="bg-white border-t mt-16">
+<footer class="glass-effect border-t border-white/20 mt-16">
     <div class="max-w-7xl mx-auto px-4 py-8">
         <div class="text-center text-gray-600">
             <p class="mb-4">🌋 Eventos Poços de Caldas</p>
@@ -551,7 +598,7 @@
 
         return `
                 <div
-                    class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-1 animate-fade-in"
+                    class="glass-effect rounded-lg card-shadow overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 hover:scale-[1.02] animate-fade-in"
                     onclick="openEventModal('${event.id}')"
                 >
                     ${event.imagem_url ? `
