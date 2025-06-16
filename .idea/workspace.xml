@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ec8707cf-f0db-49eb-9646-b642f21e9e1a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/admin.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
@@ -61,7 +59,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750023850902</updated>
       <workItem from="1750023852023" duration="756000" />
-      <workItem from="1750074813353" duration="4212000" />
+      <workItem from="1750074813353" duration="5078000" />
     </task>
     <task id="LOCAL-00001" summary="primeiro mockup site">
       <option name="closed" value="true" />
