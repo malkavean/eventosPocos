@@ -4,11 +4,11 @@
 <meta name="keywords" content="eventos poços de caldas, shows, teatro, cinema, gastronomia, cultura, entretenimento, minas gerais">
 <meta name="author" content="Eventos Poços de Caldas">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://eventospocoscaldas.com/">
+<link rel="canonical" href="https://eventos-pocos.vercel.app/">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://eventospocoscaldas.com/">
+<meta property="og:url" content="https://eventos-pocos.vercel.app/">
 <meta property="og:title" content="Eventos em Poços de Caldas">
 <html lang="pt-BR">
 <head>
@@ -25,21 +25,21 @@
     <meta name="keywords" content="eventos poços de caldas, shows, teatro, cinema, gastronomia, cultura, entretenimento, minas gerais, agenda cultural, eventos gratuitos, festival">
     <meta name="author" content="Eventos Poços de Caldas">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://eventospocoscaldas.com/">
+    <link rel="canonical" href="https://eventos-pocos.vercel.app/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://eventospocoscaldas.com/">
+    <meta property="og:url" content="https://eventos-pocos.vercel.app/">
     <meta property="og:title" content="Eventos em Poços de Caldas - Agenda Cultural Completa">
     <meta property="og:description" content="Descubra os melhores eventos em Poços de Caldas - MG. Shows, teatro, cinema, gastronomia e muito mais.">
-    <meta property="og:image" content="https://eventospocoscaldas.com/og-image.jpg">
+    <meta property="og:image" content="https://eventos-pocos.vercel.app/og-image.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://eventospocoscaldas.com/">
+    <meta property="twitter:url" content="https://eventos-pocos.vercel.app/">
     <meta property="twitter:title" content="Eventos em Poços de Caldas - Agenda Cultural Completa">
     <meta property="twitter:description" content="Descubra os melhores eventos em Poços de Caldas - MG. Shows, teatro, cinema, gastronomia e muito mais.">
-    <meta property="twitter:image" content="https://eventospocoscaldas.com/og-image.jpg">
+    <meta property="twitter:image" content="https://eventos-pocos.vercel.app/og-image.jpg">
 
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
@@ -48,10 +48,10 @@
             "@type": "WebSite",
             "name": "Eventos Poços de Caldas",
             "description": "Agenda cultural completa de Poços de Caldas - MG",
-            "url": "https://eventospocoscaldas.com",
+            "url": "https://eventos-pocos.vercel.app",
             "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://eventospocoscaldas.com/?search={search_term_string}",
+                "target": "https://eventos-pocos.vercel.app/?search={search_term_string}",
                 "query-input": "required name=search_term_string"
             },
             "areaServed": {
@@ -587,6 +587,16 @@
                 style: 'currency',
                 currency: 'BRL'
             }).format(price || 0);
+        },
+
+        formatDescription: (description) => {
+            if (!description) return '';
+            // Converter quebras de linha em <br> e paragrafos
+            return description
+                .replace(/\n\s*\n/g, '</p><p>')  // Dupla quebra = novo parágrafo
+                .replace(/\n/g, '<br>')          // Quebra simples = <br>
+                .replace(/^/, '<p>')             // Adicionar <p> no início
+                .replace(/$/, '</p>');           // Adicionar </p> no final
         }
     };
 
@@ -792,7 +802,11 @@
 
                         <div>
                             <h3 class="font-semibold mb-2">Descrição</h3>
-                            <p class="text-gray-700 leading-relaxed">${event.descricao}</p>
+                            <div class="bg-gray-50 rounded-lg p-4 max-h-48 overflow-y-auto border border-gray-200">
+                                <div class="text-gray-700 leading-relaxed prose prose-sm max-w-none">
+                                    ${formatters.formatDescription(event.descricao)}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
