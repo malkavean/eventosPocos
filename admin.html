@@ -437,8 +437,8 @@
 
 <script type="module">
   // Configuração do Supabase
-  const SUPABASE_URL = 'https://nikhfwdgormvgrlprcun.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5pa2hmd2Rnb3JtdmdybHByY3VuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwNzI5NzcsImV4cCI6MjA2NTY0ODk3N30.pIbX4ZwDBXIGRhGFGU_TCd0ZYqSO3jN1RKQHZo6DL3A';
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'fallback-url';
+  const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'fallback-url';
 
   // Inicializar Supabase
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
