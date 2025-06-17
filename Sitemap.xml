@@ -8,7 +8,7 @@
 
     <!-- Página Principal -->
     <url>
-        <loc>https://eventospocoscaldas.com/</loc>
+        <loc>https://eventos-pocos.vercel.app/</loc>
         <lastmod>2025-06-16</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
@@ -16,7 +16,7 @@
 
     <!-- Página de Política de Privacidade -->
     <url>
-        <loc>https://eventospocoscaldas.com/privacy.html</loc>
+        <loc>https://eventos-pocos.vercel.app/privacy.html</loc>
         <lastmod>2025-06-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
@@ -24,7 +24,7 @@
 
     <!-- Página de Termos de Uso -->
     <url>
-        <loc>https://eventospocoscaldas.com/terms.html</loc>
+        <loc>https://eventos-pocos.vercel.app/terms.html</loc>
         <lastmod>2025-06-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
@@ -32,7 +32,7 @@
 
     <!-- Página de Login (não indexar) -->
     <!-- <url>
-        <loc>https://eventospocoscaldas.com/login.html</loc>
+        <loc>https://eventos-pocos.vercel.app/login.html</loc>
         <lastmod>2025-06-16</lastmod>
         <changefreq>never</changefreq>
         <priority>0.1</priority>
@@ -41,7 +41,7 @@
     <!-- URLs dinâmicas de eventos serão adicionadas automaticamente -->
     <!-- Exemplo:
     <url>
-        <loc>https://eventospocoscaldas.com/?evento=1</loc>
+        <loc>https://eventos-pocos.vercel.app/?evento=1</loc>
         <lastmod>2025-06-16</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
