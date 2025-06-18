@@ -607,12 +607,110 @@
         retryConnection: document.getElementById('retry-connection')
     };
 
-    // Carregar eventos do Supabase
+    // Classe para gerenciar limpeza de eventos
+    class EventCleanupManager {
+        constructor() {
+            this.lastCleanup = localStorage.getItem('lastEventCleanup');
+        }
+
+        shouldRemoveEvent(evento) {
+            const now = new Date();
+            const oneDayAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+
+            // Se tem data_fim, usar ela como referência
+            if (evento.data_fim) {
+                const dataFim = new Date(evento.data_fim);
+                return dataFim < oneDayAgo;
+            }
+
+            // Se não tem data_fim, usar data_inicio
+            const dataInicio = new Date(evento.data_inicio);
+            return dataInicio < oneDayAgo;
+        }
+
+        async markExpiredEventsAsInactive() {
+            try {
+                console.log('🧹 Verificando eventos expirados...');
+
+                // Buscar todos os eventos ativos
+                const { data: eventos, error: fetchError } = await supabase
+                    .from('eventos')
+                    .select('*')
+                    .neq('ativo', false); // Não buscar eventos já marcados como inativos
+
+                if (fetchError) throw fetchError;
+                if (!eventos || eventos.length === 0) return { success: true, removed: 0 };
+
+                // Filtrar eventos que devem ser removidos
+                const eventosParaRemover = eventos.filter(evento => this.shouldRemoveEvent(evento));
+
+                if (eventosParaRemover.length === 0) {
+                    console.log('✅ Nenhum evento expirado encontrado');
+                    return { success: true, removed: 0 };
+                }
+
+                console.log(`📋 Marcando ${eventosParaRemover.length} eventos como inativos`);
+
+                // Marcar eventos como inativos
+                const idsParaRemover = eventosParaRemover.map(e => e.id);
+
+                const { error: updateError } = await supabase
+                    .from('eventos')
+                    .update({
+                        ativo: false,
+                        data_remocao: new Date().toISOString()
+                    })
+                    .in('id', idsParaRemover);
+
+                if (updateError) throw updateError;
+
+                // Salvar timestamp da limpeza
+                localStorage.setItem('lastEventCleanup', new Date().toISOString());
+
+                console.log(`✅ ${eventosParaRemover.length} eventos marcados como inativos`);
+
+                return { success: true, removed: eventosParaRemover.length };
+
+            } catch (error) {
+                console.error('❌ Erro na limpeza de eventos:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        shouldRunCleanup() {
+            if (!this.lastCleanup) return true;
+
+            const lastCleanupDate = new Date(this.lastCleanup);
+            const now = new Date();
+            const oneDayInMs = 24 * 60 * 60 * 1000;
+
+            return (now.getTime() - lastCleanupDate.getTime()) > oneDayInMs;
+        }
+
+        async runAutomaticCleanup() {
+            if (!this.shouldRunCleanup()) {
+                console.log('⏰ Limpeza já executada hoje');
+                return { success: true, skipped: true };
+            }
+
+            return await this.markExpiredEventsAsInactive();
+        }
+    }
+
+    // Instância do gerenciador de limpeza
+    const cleanupManager = new EventCleanupManager();
+
+    // Carregar eventos do Supabase (apenas eventos ativos)
     async function loadEventsFromDatabase() {
         try {
+            // Executar limpeza automática primeiro (se necessário)
+            await cleanupManager.runAutomaticCleanup();
+
+            // Buscar apenas eventos ativos
             const { data, error } = await supabase
                 .from('eventos')
                 .select('*')
+                .neq('ativo', false) // Não buscar eventos inativos
                 .order('data_inicio', { ascending: true });
 
             if (error) {
@@ -629,73 +727,73 @@
 
     // Utilitários de formatação
     const formatters = {
-            formatDate: (dateString) => {
-                if (!dateString) return '';
-                try {
-                    // Se a string não contém timezone, assume horário local
-                    const date = dateString.includes('T') ?
-                        new Date(dateString) :
-                        new Date(dateString + 'T00:00:00');
+        formatDate: (dateString) => {
+            if (!dateString) return '';
+            try {
+                // Se a string não contém timezone, assume horário local
+                const date = dateString.includes('T') ?
+                    new Date(dateString) :
+                    new Date(dateString + 'T00:00:00');
 
-                    return date.toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric'
-                    });
-                } catch (error) {
-                    console.error('Erro ao formatar data:', dateString, error);
-                    return dateString; // Retorna string original se houver erro
-                }
-            },
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            } catch (error) {
+                console.error('Erro ao formatar data:', dateString, error);
+                return dateString; // Retorna string original se houver erro
+            }
+        },
 
-            formatTime: (dateString) => {
-                if (!dateString) return '';
-                try {
-                    const date = new Date(dateString);
+        formatTime: (dateString) => {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
 
-                    // Verificar se a data é válida
-                    if (isNaN(date.getTime())) {
-                        console.error('Data inválida:', dateString);
-                        return '';
-                    }
-
-                    // Ajustar 3 horas para compensar o timezone (GMT-3)
-                    const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
-
-                    return adjustedDate.toLocaleTimeString('pt-BR', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                } catch (error) {
-                    console.error('Erro ao formatar hora:', dateString, error);
+                // Verificar se a data é válida
+                if (isNaN(date.getTime())) {
+                    console.error('Data inválida:', dateString);
                     return '';
                 }
-            },
 
-            formatFullDate: (dateString) => {
-                if (!dateString) return '';
-                try {
-                    const date = new Date(dateString);
+                // Ajustar 3 horas para compensar o timezone (GMT-3)
+                const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
 
-                    if (isNaN(date.getTime())) {
-                        console.error('Data inválida:', dateString);
-                        return dateString;
-                    }
+                return adjustedDate.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (error) {
+                console.error('Erro ao formatar hora:', dateString, error);
+                return '';
+            }
+        },
 
-                    // Ajustar 3 horas para compensar o timezone
-                    const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
+        formatFullDate: (dateString) => {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
 
-                    return adjustedDate.toLocaleDateString('pt-BR', {
-                        weekday: 'long',
-                        day: '2-digit',
-                        month: 'long',
-                        year: 'numeric'
-                    });
-                } catch (error) {
-                    console.error('Erro ao formatar data completa:', dateString, error);
+                if (isNaN(date.getTime())) {
+                    console.error('Data inválida:', dateString);
                     return dateString;
                 }
-            },
+
+                // Ajustar 3 horas para compensar o timezone
+                const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
+
+                return adjustedDate.toLocaleDateString('pt-BR', {
+                    weekday: 'long',
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            } catch (error) {
+                console.error('Erro ao formatar data completa:', dateString, error);
+                return dateString;
+            }
+        },
 
         formatPrice: (price) => {
             return new Intl.NumberFormat('pt-BR', {

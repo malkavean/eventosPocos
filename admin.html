@@ -613,9 +613,11 @@
       elements.loadingTable.classList.remove('hidden');
       elements.eventsTableBody.innerHTML = '';
 
+      // Buscar apenas eventos ativos no admin
       const { data, error } = await supabase
               .from('eventos')
               .select('*')
+              .neq('ativo', false) // Não buscar eventos inativos
               .order('data_inicio', { ascending: true });
 
       if (error) throw error;
