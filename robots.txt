@@ -4,7 +4,7 @@ Disallow: /admin.html
 Disallow: /login.html
 
 # Sitemap
-Sitemap: https://eventospocoscaldas.com/sitemap.xml
+Sitemap: https://eventos-pocos.vercel.app/sitemap.xml
 
 # Crawl-delay (opcional - reduz carga no servidor)
 Crawl-delay: 1
