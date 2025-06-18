@@ -611,7 +611,7 @@
                     if (remainingDays <= 7) {
                         return months === 1 ? '1 mês' : `${months} meses`;
                     } else {
-                        return `${months} mês${months > 1 ? 'es' : ''} e ${Math.floor(remainingDays / 7)} semana${Math.floor(remainingDays / 7) > 1 ? 's' : ''}`;
+                        return `${months} mes${months > 1 ? 'es' : ''} e ${Math.floor(remainingDays / 7)} semana${Math.floor(remainingDays / 7) > 1 ? 's' : ''}`;
                     }
                 }
             } catch (error) {

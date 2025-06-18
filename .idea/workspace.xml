@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ec8707cf-f0db-49eb-9646-b642f21e9e1a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/robots.txt" beforeDir="false" afterPath="$PROJECT_DIR$/robots.txt" afterDir="false" />
-    </list>
+    <list default="true" id="ec8707cf-f0db-49eb-9646-b642f21e9e1a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -80,7 +77,7 @@
       <workItem from="1750151586150" duration="114000" />
       <workItem from="1750248968272" duration="3874000" />
       <workItem from="1750253318076" duration="1663000" />
-      <workItem from="1750268930543" duration="2148000" />
+      <workItem from="1750268930543" duration="2229000" />
     </task>
     <task id="LOCAL-00001" summary="primeiro mockup site">
       <option name="closed" value="true" />
@@ -122,7 +119,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750270973206</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="atualizacao do robots que estava com endereco errado">
+      <option name="closed" value="true" />
+      <created>1750271359192</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1750271359192</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -133,6 +138,7 @@
     <MESSAGE value="alteracao no vite que estava faltando enderecos" />
     <MESSAGE value="atualizao de formatacao de datas, e adicionar google search html" />
     <MESSAGE value="atualiazacao do css" />
-    <option name="LAST_COMMIT_MESSAGE" value="atualiazacao do css" />
+    <MESSAGE value="atualizacao do robots que estava com endereco errado" />
+    <option name="LAST_COMMIT_MESSAGE" value="atualizacao do robots que estava com endereco errado" />
   </component>
 </project>
