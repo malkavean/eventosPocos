@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ec8707cf-f0db-49eb-9646-b642f21e9e1a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/google9101d9e2296c1274.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +80,7 @@
       <workItem from="1750151586150" duration="114000" />
       <workItem from="1750248968272" duration="3874000" />
       <workItem from="1750253318076" duration="1663000" />
-      <workItem from="1750268930543" duration="1005000" />
+      <workItem from="1750268930543" duration="1743000" />
     </task>
     <task id="LOCAL-00001" summary="primeiro mockup site">
       <option name="closed" value="true" />
@@ -107,7 +106,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750253382334</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="atualizao de formatacao de datas, e adicionar google search html">
+      <option name="closed" value="true" />
+      <created>1750269982259</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1750269982259</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,6 +123,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="primeiro mockup site" />
     <MESSAGE value="alteracao no vite que estava faltando enderecos" />
-    <option name="LAST_COMMIT_MESSAGE" value="alteracao no vite que estava faltando enderecos" />
+    <MESSAGE value="atualizao de formatacao de datas, e adicionar google search html" />
+    <option name="LAST_COMMIT_MESSAGE" value="atualizao de formatacao de datas, e adicionar google search html" />
   </component>
 </project>

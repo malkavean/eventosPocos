@@ -1,4 +1,4 @@
-/* styles.css - Estilos para Poços Vibe */
+/* style.css - Estilos para Poços Vibe */
 
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -198,4 +198,116 @@ body::before {
     background: rgba(255, 255, 255, 0.95);
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== MELHORIAS NO MODAL ========== */
+
+/* Modal maior e mais espaçoso */
+#event-modal .bg-white {
+    max-width: 4xl !important; /* Aumenta de 2xl para 4xl */
+    width: 95% !important; /* Usa mais largura da tela */
+    max-height: 95vh !important; /* Aumenta altura máxima */
+    margin: auto;
+}
+
+/* Padding interno do modal aumentado */
+#event-modal .p-6 {
+    padding: 2rem !important; /* Aumenta padding de 1.5rem para 2rem */
+}
+
+/* Espaçamento melhor entre seções */
+#event-modal .mb-6 {
+    margin-bottom: 2rem !important; /* Aumenta margem */
+}
+
+#event-modal .mb-4 {
+    margin-bottom: 1.5rem !important; /* Aumenta margem */
+}
+
+/* ========== MELHORIAS NOS BOTÕES ========== */
+
+/* Botões do modal com mais padding e espaçamento */
+#event-modal .flex.gap-3 {
+    gap: 1rem !important; /* Aumenta gap entre botões */
+    margin-top: 2rem !important; /* Mais espaço acima dos botões */
+    padding-top: 1.5rem !important; /* Padding adicional no topo */
+    border-top: 1px solid #e5e7eb; /* Linha sutil para separar */
+}
+
+/* Estilo apenas para os botões de ação (Compartilhar e Fechar) */
+#event-modal .flex.gap-3 button {
+    padding: 1rem 2rem !important; /* Mais padding vertical e horizontal */
+    font-size: 1rem !important; /* Texto um pouco maior */
+    font-weight: 600 !important; /* Peso da fonte mais forte */
+    border-radius: 0.75rem !important; /* Bordas mais arredondadas */
+    transition: all 0.3s ease !important; /* Transição suave */
+    min-height: 3rem !important; /* Altura mínima dos botões */
+}
+
+/* Botão X - manter tamanho original */
+#event-modal .absolute.top-4.right-4 {
+    padding: 0.5rem !important; /* Padding original */
+    width: 2.5rem !important; /* Largura fixa */
+    height: 2.5rem !important; /* Altura fixa */
+    min-height: auto !important; /* Remove altura mínima */
+    font-size: inherit !important; /* Tamanho da fonte original */
+}
+
+/* Botão de compartilhar com efeito especial */
+#event-modal button:first-child {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
+    transform: translateY(0) !important;
+}
+
+#event-modal button:first-child:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Botão de fechar com estilo melhorado */
+#event-modal button:last-child {
+    background: #f9fafb !important;
+    border: 2px solid #e5e7eb !important;
+    color: #374151 !important;
+}
+
+#event-modal button:last-child:hover {
+    background: #f3f4f6 !important;
+    border-color: #d1d5db !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ========== MELHORIAS RESPONSIVAS ========== */
+
+/* Para telas menores */
+@media (max-width: 768px) {
+    #event-modal .bg-white {
+        width: 98% !important;
+        max-height: 98vh !important;
+        margin: 1% auto !important;
+    }
+
+    #event-modal .p-6 {
+        padding: 1.5rem !important;
+    }
+
+    #event-modal button {
+        padding: 0.875rem 1.5rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Botões em coluna em telas muito pequenas */
+    #event-modal .flex.gap-3 {
+        flex-direction: column !important;
+    }
+}
+
+/* Para telas grandes */
+@media (min-width: 1280px) {
+    #event-modal .bg-white {
+        max-width: 5xl !important; /* Ainda maior em telas grandes */
+    }
 }
