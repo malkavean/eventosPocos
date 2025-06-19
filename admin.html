@@ -39,6 +39,19 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    /* Estilo para descrições com parágrafos */
+    .formatted-description p {
+      margin-bottom: 0.75rem;
+    }
+    .formatted-description p:last-child {
+      margin-bottom: 0;
+    }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -177,7 +190,6 @@
     </div>
   </div>
 </main>
-
 <!-- Modal de Criar/Editar Evento -->
 <div id="event-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
   <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-slide-up">
@@ -355,13 +367,28 @@
             <textarea
                     id="descricao"
                     required
-                    rows="6"
+                    rows="8"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Descreva o evento, suas atrações e informações importantes...&#10;&#10;Dica: Use Enter para quebrar linha e Enter duplo para novo parágrafo"
+                    placeholder="Descreva o evento, suas atrações e informações importantes...&#10;&#10;💡 Para criar parágrafos: deixe uma linha em branco entre os textos&#10;&#10;Exemplo:&#10;Primeiro parágrafo do evento.&#10;&#10;Segundo parágrafo com mais informações.&#10;&#10;Terceiro parágrafo final."
             ></textarea>
-            <p class="text-xs text-gray-500 mt-1">
-              💡 Use Enter para quebrar linha e Enter duplo para criar novos parágrafos
-            </p>
+            <div class="text-xs text-gray-500 mt-2 space-y-1">
+              <p>💡 <strong>Para criar parágrafos:</strong> Deixe uma linha completamente em branco entre os textos</p>
+              <p>📝 <strong>Quebra de linha simples:</strong> Use apenas um Enter</p>
+              <p>📋 <strong>Novo parágrafo:</strong> Enter + linha vazia + Enter</p>
+            </div>
+
+            <!-- Preview da descrição -->
+            <div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="text-sm font-medium text-gray-700">Preview da Descrição:</h4>
+                <button type="button" id="preview-btn" onclick="updatePreview()" class="text-xs text-blue-600 hover:text-blue-800">
+                  🔄 Atualizar Preview
+                </button>
+              </div>
+              <div id="description-preview" class="text-sm text-gray-600 formatted-description min-h-[2rem] border-l-4 border-blue-300 pl-3">
+                <em class="text-gray-400">Digite uma descrição para ver o preview...</em>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -434,7 +461,6 @@
     <span id="toast-message">Operação realizada com sucesso!</span>
   </div>
 </div>
-
 <script type="module">
   // Configuração do Supabase
   const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'fallback-url';
@@ -471,7 +497,9 @@
     toastIcon: document.getElementById('toast-icon'),
     connectionStatus: document.getElementById('connection-status'),
     userEmail: document.getElementById('user-email'),
-    logoutBtn: document.getElementById('logout-btn')
+    logoutBtn: document.getElementById('logout-btn'),
+    descricaoTextarea: document.getElementById('descricao'),
+    descriptionPreview: document.getElementById('description-preview')
   };
 
   // Verificar autenticação
@@ -509,7 +537,7 @@
     }
   }
 
-  // Utilitários
+  // Utilitários - CORRIGIDO: Remover ajuste de 3 horas
   const formatDate = (dateString) => {
     if (!dateString) return '';
     try {
@@ -520,10 +548,8 @@
         return dateString;
       }
 
-      // Ajustar 3 horas para compensar o timezone
-      const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
-
-      return adjustedDate.toLocaleDateString('pt-BR', {
+      // CORREÇÃO: Usar a data diretamente sem ajustes de timezone
+      return date.toLocaleDateString('pt-BR', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
@@ -543,14 +569,44 @@
     }).format(price || 0);
   };
 
+  // CORRIGIDO: Função para formatar descrição com parágrafos
   const formatDescription = (description) => {
     if (!description) return '';
-    // Converter quebras de linha em <br> e paragrafos
-    return description
-            .replace(/\n\s*\n/g, '</p><p>')  // Dupla quebra = novo parágrafo
-            .replace(/\n/g, '<br>')          // Quebra simples = <br>
-            .replace(/^/, '<p>')             // Adicionar <p> no início
-            .replace(/$/, '</p>');           // Adicionar </p> no final
+
+    // Escapar HTML primeiro
+    const escapeHtml = (text) => {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    };
+
+    const escapedDescription = escapeHtml(description);
+
+    // Converter quebras de linha em HTML
+    return escapedDescription
+            .replace(/\n\s*\n\s*\n/g, '\n\n') // Normalizar múltiplas quebras
+            .replace(/\n\s*\n/g, '</p><p>')   // Dupla quebra = novo parágrafo
+            .replace(/\n/g, '<br>')           // Quebra simples = <br>
+            .replace(/^/, '<p>')              // Adicionar <p> no início
+            .replace(/$/, '</p>')             // Adicionar </p> no final
+            .replace(/<p><\/p>/g, '')         // Remover parágrafos vazios
+            .replace(/<p><br><\/p>/g, '<p></p>'); // Limpar parágrafos só com <br>
+  };
+
+  // NOVA: Função para criar preview da descrição
+  const updatePreview = () => {
+    const description = elements.descricaoTextarea?.value || '';
+    const previewElement = elements.descriptionPreview;
+
+    if (!previewElement) return;
+
+    if (description.trim()) {
+      previewElement.innerHTML = formatDescription(description);
+      previewElement.className = 'text-sm text-gray-700 formatted-description min-h-[2rem] border-l-4 border-blue-300 pl-3';
+    } else {
+      previewElement.innerHTML = '<em class="text-gray-400">Digite uma descrição para ver o preview...</em>';
+      previewElement.className = 'text-sm text-gray-600 formatted-description min-h-[2rem] border-l-4 border-blue-300 pl-3';
+    }
   };
 
   // Verificar conexão e criar tabela se necessário
@@ -633,7 +689,7 @@
     }
   }
 
-  // Renderização da tabela
+  // CORRIGIDO: Renderização da tabela com descrição formatada
   function renderEventsTable() {
     if (filteredEvents.length === 0) {
       elements.eventsTableBody.innerHTML = '';
@@ -643,13 +699,16 @@
       elements.eventsTableBody.innerHTML = filteredEvents.map(event => `
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4">
-                            <div class="flex items-center">
+                            <div class="flex items-start">
                                 ${event.imagem_url ? `
-                                    <img class="h-10 w-10 rounded-lg object-cover mr-3" src="${event.imagem_url}" alt="${event.titulo}">
+                                    <img class="h-12 w-12 rounded-lg object-cover mr-3 flex-shrink-0" src="${event.imagem_url}" alt="${event.titulo}">
                                 ` : ''}
-                                <div>
+                                <div class="min-w-0 flex-1">
                                     <div class="text-sm font-medium text-gray-900 line-clamp-1">${event.titulo}</div>
                                     <div class="text-sm text-gray-500 line-clamp-1">${event.organizador || 'Sem organizador'}</div>
+                                    <div class="text-xs text-gray-600 mt-1 line-clamp-2 formatted-description">
+                                        ${formatDescription(event.descricao).substring(0, 100)}${event.descricao.length > 100 ? '...' : ''}
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -726,28 +785,28 @@
 
       elements.modalTitle.textContent = 'Editar Evento';
 
-      // Função auxiliar para ajustar data para edição
-      function adjustDateForEdit(dateString) {
+      // CORREÇÃO: Função para preparar data para edição (removido ajuste de 3 horas)
+      function prepareDateForEdit(dateString) {
         if (!dateString) return '';
         try {
           const date = new Date(dateString);
           if (isNaN(date.getTime())) return '';
 
-          // Ajustar 3 horas e formatar para datetime-local
-          const adjustedDate = new Date(date.getTime() + (3 * 60 * 60 * 1000));
-          return adjustedDate.toISOString().slice(0, 16);
+          // CORREÇÃO: Usar a data diretamente sem ajustes de timezone
+          return date.toISOString().slice(0, 16);
         } catch (error) {
-          console.error('Erro ao ajustar data para edição:', dateString, error);
+          console.error('Erro ao preparar data para edição:', dateString, error);
           return '';
         }
       }
+
       // Preencher formulário
       document.getElementById('event-id').value = event.id;
       document.getElementById('titulo').value = event.titulo;
       document.getElementById('categoria').value = event.categoria;
       document.getElementById('imagem_url').value = event.imagem_url || '';
-      document.getElementById('data_inicio').value = adjustDateForEdit(event.data_inicio);
-      document.getElementById('data_fim').value = adjustDateForEdit(event.data_fim);
+      document.getElementById('data_inicio').value = prepareDateForEdit(event.data_inicio);
+      document.getElementById('data_fim').value = prepareDateForEdit(event.data_fim);
       document.getElementById('local').value = event.local;
       document.getElementById('endereco').value = event.endereco || '';
       document.getElementById('preco').value = event.preco || '';
@@ -761,6 +820,9 @@
       elements.eventForm.reset();
       document.getElementById('event-id').value = '';
     }
+
+    // Atualizar preview da descrição
+    setTimeout(updatePreview, 100);
 
     elements.eventModal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -865,6 +927,15 @@
     elements.refreshBtn.addEventListener('click', loadEvents);
     elements.logoutBtn.addEventListener('click', handleLogout);
 
+    // NOVO: Preview da descrição em tempo real
+    if (elements.descricaoTextarea) {
+      elements.descricaoTextarea.addEventListener('input', updatePreview);
+      elements.descricaoTextarea.addEventListener('keyup', updatePreview);
+      elements.descricaoTextarea.addEventListener('paste', () => {
+        setTimeout(updatePreview, 100);
+      });
+    }
+
     // Formulário de evento
     elements.eventForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -911,13 +982,6 @@
     });
 
     // Fechar modais clicando fora
-    elements.eventModal.addEventListener('click', (e) => {
-      // Remover o fechamento do modal de evento clicando fora
-      // if (e.target === elements.eventModal) {
-      //     closeModal();
-      // }
-    });
-
     elements.deleteModal.addEventListener('click', (e) => {
       if (e.target === elements.deleteModal) {
         closeDeleteModal();
@@ -930,6 +994,7 @@
   window.confirmDelete = confirmDelete;
   window.closeModal = closeModal;
   window.closeDeleteModal = closeDeleteModal;
+  window.updatePreview = updatePreview;
 
   // Inicialização
   async function init() {

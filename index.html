@@ -815,11 +815,11 @@
                     </button>
                 </div>
             ` : ''}
-
-            <div class="p-6">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-2 flex-wrap">
+<div class="px-8 pt-6">
+    <div class="grid md:grid-cols-2 gap-8 mb-6">
+                    <!-- COLUNA ESQUERDA: Todas as informações -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2 mb-4 flex-wrap">
                             <span
                                 class="px-3 py-1 rounded-full text-sm font-medium text-white"
                                 style="background-color: ${categoria?.cor || '#6B7280'}"
@@ -845,20 +845,7 @@
                         </div>
 
                         <h2 class="text-2xl font-bold mb-4">${event.titulo}</h2>
-                    </div>
 
-                    ${!event.imagem_url ? `
-                        <button
-                            onclick="closeEventModal()"
-                            class="text-gray-500 hover:text-gray-700 text-2xl ml-4"
-                        >
-                            ×
-                        </button>
-                    ` : ''}
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-6 mb-6">
-                    <div class="space-y-4">
                         <div class="flex items-start text-gray-700">
                             <svg class="w-5 h-5 mr-3 mt-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4m4 0V7a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1h1v13a2 2 0 002 2h8a2 2 0 002-2V10h1a1 1 0 001-1V7a1 1 0 00-1-1h-4z"></path>
@@ -915,16 +902,17 @@
                         ` : ''}
                     </div>
 
-                    <div>
-                        <h3 class="font-semibold mb-2">Descrição</h3>
-                        <div class="bg-gray-50 rounded-lg p-4 max-h-48 overflow-y-auto border border-gray-200">
-                            <div class="text-gray-700 leading-relaxed prose prose-sm max-w-none">
+                    <!-- COLUNA DIREITA: Descrição ocupando toda a altura -->
+                    <div class="flex flex-col h-full">
+                        <h3 class="font-semibold mb-3 text-lg">Descrição</h3>
+                            <div class="bg-gray-50 rounded-lg p-4 flex-1 border border-gray-200 min-h-[400px]">
+                                <div class="text-gray-700 leading-relaxed">
                                 ${formatters.formatDescription(event.descricao)}
                             </div>
                         </div>
                     </div>
                 </div>
-
+</div> <!-- fecha a div do padding -->
                 <div class="flex gap-3">
                     <button
                         onclick="shareEvent()"

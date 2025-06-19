@@ -200,19 +200,19 @@ body::before {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* ========== MELHORIAS NO MODAL ========== */
+/* ========== MELHORIAS NO MODAL - ATUALIZADO ========== */
 
-/* Modal maior e mais espaçoso */
+/* Modal AINDA MAIS LARGO e espaçoso */
 #event-modal .bg-white {
-    max-width: 4xl !important; /* Aumenta de 2xl para 4xl */
-    width: 95% !important; /* Usa mais largura da tela */
-    max-height: 95vh !important; /* Aumenta altura máxima */
+    max-width: 6xl !important; /* Aumentado de 4xl para 6xl (máximo do Tailwind) */
+    width: 98% !important; /* Usa quase toda a largura da tela */
+    max-height: 96vh !important; /* Aumenta altura máxima */
     margin: auto;
 }
 
 /* Padding interno do modal aumentado */
 #event-modal .p-6 {
-    padding: 2rem !important; /* Aumenta padding de 1.5rem para 2rem */
+    padding: 2.5rem !important; /* Aumenta padding de 2rem para 2.5rem */
 }
 
 /* Espaçamento melhor entre seções */
@@ -222,6 +222,96 @@ body::before {
 
 #event-modal .mb-4 {
     margin-bottom: 1.5rem !important; /* Aumenta margem */
+}
+
+/* ========== LAYOUT EM DUAS COLUNAS BALANCEADAS ========== */
+
+/* Grid principal do formulário - duas colunas iguais */
+#event-modal .grid.md\:grid-cols-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* Duas colunas de tamanho igual */
+    gap: 2rem !important; /* Espaço entre as colunas */
+    align-items: start !important; /* Alinha no topo */
+}
+
+/* Título ocupa as duas colunas */
+#event-modal .md\:col-span-2:has(#titulo) {
+    grid-column: 1 / -1 !important;
+}
+
+/* Campos da coluna esquerda */
+#event-modal div:has(> label[for="categoria"]),
+#event-modal div:has(> label[for="imagem_url"]),
+#event-modal div:has(> label[for="data_inicio"]),
+#event-modal div:has(> label[for="data_fim"]),
+#event-modal div:has(> label[for="local"]),
+#event-modal div:has(> label[for="endereco"]),
+#event-modal div:has(> label[for="preco"]),
+#event-modal div:has(> label[for="gratuito"]),
+#event-modal div:has(> label[for="organizador"]),
+#event-modal div:has(> label[for="contato"]) {
+    grid-column: 1 !important; /* Primeira coluna */
+}
+
+/* DESCRIÇÃO OCUPA TODA A COLUNA DIREITA */
+#event-modal div:has(> label[for="descricao"]) {
+    grid-column: 2 !important; /* Segunda coluna completa */
+    grid-row: 2 / -2 !important; /* Do segundo ao penúltimo row */
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important; /* Altura total disponível */
+    min-height: 600px !important; /* Altura mínima generosa */
+}
+
+/* Label da descrição */
+#event-modal label[for="descricao"] {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+    color: #1e293b !important;
+    flex-shrink: 0 !important; /* Não encolhe */
+}
+
+/* Caixa de descrição ocupa todo espaço restante */
+#event-modal #descricao {
+    flex: 1 !important; /* Cresce para ocupar espaço disponível */
+    min-height: 400px !important; /* Altura mínima ainda maior */
+    resize: vertical !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    padding: 1rem !important;
+    width: 100% !important;
+    word-wrap: break-word !important;
+    white-space: pre-wrap !important;
+}
+
+/* Container das dicas de formatação */
+#event-modal .text-xs.text-gray-500 {
+    margin-top: 1rem !important;
+    padding: 1rem !important;
+    background: rgba(239, 246, 255, 0.8) !important;
+    border-radius: 0.5rem !important;
+    border-left: 4px solid #3b82f6 !important;
+    flex-shrink: 0 !important; /* Não encolhe */
+}
+
+/* Container do preview */
+#event-modal .mt-4.p-4:has(#description-preview) {
+    flex: 0 0 auto !important; /* Tamanho fixo */
+    margin-top: 1.5rem !important;
+    padding: 1.5rem !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 0.75rem !important;
+    border: 2px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Preview da descrição */
+#event-modal #description-preview {
+    min-height: 120px !important;
+    max-height: 200px !important; /* Um pouco menor para caber melhor */
+    overflow-y: auto !important;
+    padding: 1rem !important;
+    line-height: 1.6 !important;
 }
 
 /* ========== MELHORIAS NOS BOTÕES ========== */
@@ -280,14 +370,28 @@ body::before {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* ========== MELHORIAS RESPONSIVAS ========== */
+/* ========== MELHORIAS RESPONSIVAS - ATUALIZADO ========== */
 
-/* Para telas menores */
+/* Para tablets e telas médias */
+@media (max-width: 1024px) {
+    #event-modal .bg-white {
+        max-width: 5xl !important; /* Um pouco menor em tablets */
+        width: 96% !important;
+    }
+
+    #event-modal #descricao,
+    #event-modal textarea {
+        min-height: 180px !important; /* Ainda grande em tablets */
+    }
+}
+
+/* Para telas menores (mobile) */
 @media (max-width: 768px) {
     #event-modal .bg-white {
         width: 98% !important;
         max-height: 98vh !important;
         margin: 1% auto !important;
+        max-width: none !important; /* Remove limitação de largura em mobile */
     }
 
     #event-modal .p-6 {
@@ -303,11 +407,47 @@ body::before {
     #event-modal .flex.gap-3 {
         flex-direction: column !important;
     }
+
+    /* Caixa de descrição menor em mobile mas ainda decente */
+    #event-modal #descricao,
+    #event-modal textarea {
+        min-height: 150px !important;
+    }
+
+    #event-modal #description-preview {
+        min-height: 100px !important;
+        max-height: 200px !important;
+    }
 }
 
-/* Para telas grandes */
-@media (min-width: 1280px) {
+/* Para telas extra pequenas */
+@media (max-width: 480px) {
     #event-modal .bg-white {
-        max-width: 5xl !important; /* Ainda maior em telas grandes */
+        width: 100% !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important; /* Remove bordas arredondadas */
+    }
+
+    #event-modal .p-6 {
+        padding: 1rem !important;
+    }
+}
+
+/* Para telas muito grandes (desktop) */
+@media (min-width: 1536px) {
+    #event-modal .bg-white {
+        max-width: 7xl !important; /* Ainda maior em telas muito grandes */
+    }
+
+    #event-modal #descricao,
+    #event-modal textarea {
+        min-height: 250px !important; /* Extra grande em desktop */
+    }
+
+    #event-modal #description-preview {
+        min-height: 150px !important;
+        max-height: 400px !important;
     }
 }
