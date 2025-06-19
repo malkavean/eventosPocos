@@ -638,12 +638,25 @@
 
         formatDescription: (description) => {
             if (!description) return '';
-            // Converter quebras de linha em <br> e paragrafos
-            return description
-                .replace(/\n\s*\n/g, '</p><p>')  // Dupla quebra = novo parágrafo
-                .replace(/\n/g, '<br>')          // Quebra simples = <br>
-                .replace(/^/, '<p>')             // Adicionar <p> no início
-                .replace(/$/, '</p>');           // Adicionar </p> no final
+
+            // Escapar HTML primeiro
+            const escapeHtml = (text) => {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            };
+
+            const escapedDescription = escapeHtml(description);
+
+            // Converter quebras de linha em HTML
+            return escapedDescription
+                .replace(/\n\s*\n\s*\n/g, '\n\n') // Normalizar múltiplas quebras
+                .replace(/\n\s*\n/g, '</p><p>')   // Dupla quebra = novo parágrafo
+                .replace(/\n/g, '<br>')           // Quebra simples = <br>
+                .replace(/^/, '<p>')              // Adicionar <p> no início
+                .replace(/$/, '</p>')             // Adicionar </p> no final
+                .replace(/<p><\/p>/g, '')         // Remover parágrafos vazios
+                .replace(/<p><br><\/p>/g, '<p></p>'); // Limpar parágrafos só com <br>
         }
     };
     // Carregar eventos do Supabase (apenas eventos ativos)
