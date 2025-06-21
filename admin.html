@@ -537,7 +537,7 @@
     }
   }
 
-  // Utilitários - CORRIGIDO: Remover ajuste de 3 horas
+  // Utilitários
   const formatDate = (dateString) => {
     if (!dateString) return '';
     try {
@@ -593,7 +593,7 @@
             .replace(/<p><br><\/p>/g, '<p></p>'); // Limpar parágrafos só com <br>
   };
 
-  // NOVA: Função para criar preview da descrição
+  // Função para criar preview da descrição
   const updatePreview = () => {
     const description = elements.descricaoTextarea?.value || '';
     const previewElement = elements.descriptionPreview;
@@ -621,7 +621,7 @@
               .limit(1);
 
       if (error && error.code === '42P01') {
-        // Tabela não existe, vamos criá-la via RPC ou informar sobre isso
+        // Tabela não existe, criar via RPC ou informar sobre isso
         elements.connectionStatus.innerHTML = '<span class="text-red-600">⚠️ Tabela não encontrada</span>';
         showToast('Tabela "eventos" não encontrada. Crie a tabela no Supabase primeiro.', 'error');
         return false;
@@ -689,7 +689,7 @@
     }
   }
 
-  // CORRIGIDO: Renderização da tabela com descrição formatada
+  // Renderização da tabela com descrição formatada
   function renderEventsTable() {
     if (filteredEvents.length === 0) {
       elements.eventsTableBody.innerHTML = '';
@@ -785,14 +785,13 @@
 
       elements.modalTitle.textContent = 'Editar Evento';
 
-      // CORREÇÃO: Função para preparar data para edição (removido ajuste de 3 horas)
+      // Função para preparar data para edição
       function prepareDateForEdit(dateString) {
         if (!dateString) return '';
         try {
           const date = new Date(dateString);
           if (isNaN(date.getTime())) return '';
 
-          // CORREÇÃO: Usar a data diretamente sem ajustes de timezone
           return date.toISOString().slice(0, 16);
         } catch (error) {
           console.error('Erro ao preparar data para edição:', dateString, error);
@@ -927,7 +926,7 @@
     elements.refreshBtn.addEventListener('click', loadEvents);
     elements.logoutBtn.addEventListener('click', handleLogout);
 
-    // NOVO: Preview da descrição em tempo real
+    // Preview da descrição em tempo real
     if (elements.descricaoTextarea) {
       elements.descricaoTextarea.addEventListener('input', updatePreview);
       elements.descricaoTextarea.addEventListener('keyup', updatePreview);
