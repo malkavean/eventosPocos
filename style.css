@@ -122,7 +122,7 @@
     60% { transform: translateY(-2px); }
 }
 
-/* Background suave e elegante */
+/* Background */
 body {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #f0f4ff 50%, #faf5ff 75%, #f8fafc 100%);
     background-size: 400% 400%;
@@ -130,7 +130,6 @@ body {
     min-height: 100vh;
 }
 
-/* Padrão sutil de fundo */
 body::before {
     content: '';
     position: fixed;
@@ -146,7 +145,7 @@ body::before {
     z-index: -1;
 }
 
-/* Header com gradiente elegante */
+/* Header */
 .header-gradient {
     background: linear-gradient(135deg,
     #1e40af 0%,
@@ -161,7 +160,7 @@ body::before {
     animation: gradientShift 12s ease infinite;
 }
 
-/* Cards com efeito glassmorphism melhorado */
+/* Cards com efeito glassmorphism  */
 .glass-effect {
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(20px);
@@ -169,7 +168,7 @@ body::before {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Seção cultural com gradiente suave */
+/* Seção cultural */
 .cultural-gradient {
     background: linear-gradient(135deg,
     #fefbff 0%,
@@ -182,7 +181,6 @@ body::before {
     animation: gradientShift 25s ease infinite;
 }
 
-/* Texto com sombra suave */
 .text-shadow {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -200,9 +198,7 @@ body::before {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* ========== MELHORIAS NO MODAL - ATUALIZADO ========== */
 
-/* Modal AINDA MAIS LARGO e espaçoso */
 #event-modal .bg-white {
     max-width: 6xl !important; /* Aumentado de 4xl para 6xl (máximo do Tailwind) */
     width: 98% !important; /* Usa quase toda a largura da tela */
@@ -210,12 +206,10 @@ body::before {
     margin: auto;
 }
 
-/* Padding interno do modal aumentado */
 #event-modal .p-6 {
     padding: 2.5rem !important; /* Aumenta padding de 2rem para 2.5rem */
 }
 
-/* Espaçamento melhor entre seções */
 #event-modal .mb-6 {
     margin-bottom: 2rem !important; /* Aumenta margem */
 }
@@ -275,7 +269,7 @@ body::before {
 /* Caixa de descrição ocupa todo espaço restante */
 #event-modal #descricao {
     flex: 1 !important; /* Cresce para ocupar espaço disponível */
-    min-height: 400px !important; /* Altura mínima ainda maior */
+    min-height: 400px !important;
     resize: vertical !important;
     font-size: 0.95rem !important;
     line-height: 1.6 !important;
@@ -308,30 +302,28 @@ body::before {
 /* Preview da descrição */
 #event-modal #description-preview {
     min-height: 120px !important;
-    max-height: 200px !important; /* Um pouco menor para caber melhor */
+    max-height: 200px !important;
     overflow-y: auto !important;
     padding: 1rem !important;
     line-height: 1.6 !important;
 }
 
-/* ========== MELHORIAS NOS BOTÕES ========== */
-
-/* Botões do modal com mais padding e espaçamento */
+/* Botões do modal  */
 #event-modal .flex.gap-3 {
-    gap: 1rem !important; /* Aumenta gap entre botões */
-    margin-top: 2rem !important; /* Mais espaço acima dos botões */
-    padding-top: 1.5rem !important; /* Padding adicional no topo */
-    border-top: 1px solid #e5e7eb; /* Linha sutil para separar */
+    gap: 1rem !important; 
+    margin-top: 2rem !important;
+    padding-top: 1.5rem !important; 
+    border-top: 1px solid #e5e7eb; 
 }
 
 /* Estilo apenas para os botões de ação (Compartilhar e Fechar) */
 #event-modal .flex.gap-3 button {
-    padding: 1rem 2rem !important; /* Mais padding vertical e horizontal */
-    font-size: 1rem !important; /* Texto um pouco maior */
-    font-weight: 600 !important; /* Peso da fonte mais forte */
-    border-radius: 0.75rem !important; /* Bordas mais arredondadas */
-    transition: all 0.3s ease !important; /* Transição suave */
-    min-height: 3rem !important; /* Altura mínima dos botões */
+    padding: 1rem 2rem !important;
+    font-size: 1rem !important; 
+    font-weight: 600 !important; 
+    border-radius: 0.75rem !important; 
+    transition: all 0.3s ease !important; 
+    min-height: 3rem !important; 
 }
 
 /* Botão X - manter tamanho original */
@@ -356,7 +348,7 @@ body::before {
     transform: translateY(-2px) !important;
 }
 
-/* Botão de fechar com estilo melhorado */
+/* Botão de fechar */
 #event-modal button:last-child {
     background: #f9fafb !important;
     border: 2px solid #e5e7eb !important;
@@ -369,8 +361,6 @@ body::before {
     transform: translateY(-1px) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
-
-/* ========== MELHORIAS RESPONSIVAS - ATUALIZADO ========== */
 
 /* Para tablets e telas médias */
 @media (max-width: 1024px) {
