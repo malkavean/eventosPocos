@@ -620,7 +620,7 @@
             }
         },
 
-        // Adicionar as funções que estavam faltando
+        
         formatTime: (dateString) => {
             return dateUtils.formatTime(dateString);
         },
@@ -639,7 +639,6 @@
         formatDescription: (description) => {
             if (!description) return '';
 
-            // Escapar HTML primeiro
             const escapeHtml = (text) => {
                 const div = document.createElement('div');
                 div.textContent = text;
@@ -684,7 +683,7 @@
     function createEventCard(event) {
         const categoria = categorias.find(c => c.nome === event.categoria);
 
-        // Usar a nova formatação de range de datas
+        // Usar a formatação de range de datas
         const dataFormatada = formatters.formatDateRange(event.data_inicio, event.data_fim);
         const horaInicio = formatters.formatTime(event.data_inicio);
         const horaFim = event.data_fim ? formatters.formatTime(event.data_fim) : null;
@@ -792,7 +791,7 @@
 
         const categoria = categorias.find(c => c.nome === event.categoria);
 
-        // Usar as novas funções de formatação
+        // Usar as funções de formatação
         const isMultiDay = formatters.isMultiDayEvent(event.data_inicio, event.data_fim);
         const dataFormatada = isMultiDay ?
             formatters.formatDateRangeDetailed(event.data_inicio, event.data_fim) :
